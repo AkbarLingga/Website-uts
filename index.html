@@ -1,0 +1,1257 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Keamanan Siber — Zero to Hero</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#07090F;--surface:#0F1521;--border:#1A2540;--border2:#26375E;
+  --text:#EFF3FA;--muted:#7A8FAD;--light:#131E35;
+  --primary:#00C2FF;--primary-bg:rgba(0,194,255,0.10);--primary-dark:#007ACC;
+  --accent:#FF6B35;--accent-bg:rgba(255,107,53,0.12);
+  --success:#00E5A0;--success-bg:rgba(0,229,160,0.12);
+  --danger:#FF4060;--danger-bg:rgba(255,64,96,0.12);
+  --warning:#FFB020;--warning-bg:rgba(255,176,32,0.12);
+  --purple:#A855F7;--purple-bg:rgba(168,85,247,0.12);
+  --radius:18px;--radius-sm:12px;
+  --sans:'Inter',sans-serif;--head:'Syne',sans-serif;--mono:'IBM Plex Mono',monospace;
+}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased;font-size:16px;line-height:1.75}
+.app{max-width:880px;margin:0 auto;padding:28px 18px 100px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:40px;margin-bottom:28px;box-shadow:0 16px 40px rgba(0,0,0,0.35)}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:16px 26px;border:1px solid var(--border2);border-radius:var(--radius-sm);background:var(--surface);color:var(--text);cursor:pointer;font-size:15px;font-weight:700;font-family:var(--head);transition:all .2s;-webkit-tap-highlight-color:transparent;letter-spacing:.3px}
+.btn:active{transform:scale(0.97)}
+.btn:hover:not(:disabled){background:var(--light);border-color:#3A527A}
+.btn:disabled{opacity:.35;cursor:not-allowed}
+.btn-p{background:linear-gradient(135deg,var(--primary-dark),var(--primary));color:#001F2E;border:none;box-shadow:0 4px 20px rgba(0,194,255,0.30)}.btn-p:hover:not(:disabled){filter:brightness(1.12)}
+.btn-s{background:var(--success);color:#002B1E;border:none}.btn-s:hover:not(:disabled){filter:brightness(1.1)}
+.btn-a{background:linear-gradient(135deg,#7B2FBE,var(--purple));color:#fff;border:none;box-shadow:0 4px 20px rgba(168,85,247,0.25)}
+
+.badge{display:inline-block;font-size:12px;padding:5px 12px;border-radius:6px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;font-family:var(--head)}
+.bb{background:var(--primary-bg);color:var(--primary)}
+.bg{background:var(--success-bg);color:var(--success)}
+.br{background:var(--danger-bg);color:var(--danger)}
+.ba{background:var(--warning-bg);color:var(--warning)}
+.bp{background:var(--purple-bg);color:var(--purple)}
+.bo{background:var(--accent-bg);color:var(--accent)}
+
+h1{font-family:var(--head);font-size:36px;font-weight:800;letter-spacing:-.5px;color:var(--text)}
+h2{font-family:var(--head);font-size:22px;font-weight:800;margin:36px 0 16px;color:var(--primary);border-bottom:1px solid var(--border);padding-bottom:10px}
+h3{font-family:var(--head);font-size:18px;font-weight:700;margin:24px 0 10px;color:var(--text)}
+p{font-size:16px;margin-bottom:16px;color:#B8C8DC;line-height:1.8}
+ul,ol{padding-left:24px;margin-bottom:16px;color:#B8C8DC}
+li{margin-bottom:8px;line-height:1.7}
+strong{color:var(--text)}
+em{color:var(--primary);font-style:normal;font-weight:600}
+
+.story-box{background:var(--primary-bg);border-left:4px solid var(--primary);padding:22px 26px;margin:20px 0;border-radius:0 var(--radius-sm) var(--radius-sm) 0;color:#9DD8F0;font-size:15.5px;line-height:1.8}
+.warn-box{background:var(--warning-bg);border-left:4px solid var(--warning);padding:20px 24px;margin:20px 0;border-radius:0 var(--radius-sm) var(--radius-sm) 0;color:#FFD680;font-size:15.5px;line-height:1.8;font-weight:500}
+.danger-box{background:var(--danger-bg);border-left:4px solid var(--danger);padding:20px 24px;margin:20px 0;border-radius:0 var(--radius-sm) var(--radius-sm) 0;color:#FFAAB8;font-size:15.5px;line-height:1.8}
+.success-box{background:var(--success-bg);border-left:4px solid var(--success);padding:20px 24px;margin:20px 0;border-radius:0 var(--radius-sm) var(--radius-sm) 0;color:#80F0CC;font-size:15.5px;line-height:1.8}
+.purple-box{background:var(--purple-bg);border-left:4px solid var(--purple);padding:20px 24px;margin:20px 0;border-radius:0 var(--radius-sm) var(--radius-sm) 0;color:#D4AAFF;font-size:15.5px;line-height:1.8}
+.code-box{background:#050810;border:1px solid var(--border2);border-radius:var(--radius-sm);padding:22px;margin:18px 0;font-family:var(--mono);font-size:14px;color:#38C8F0;overflow-x:auto;line-height:1.6}
+code{font-family:var(--mono);background:#050810;border:1px solid var(--border);padding:2px 7px;border-radius:5px;font-size:13.5px;color:#FF8FAF}
+.tag-row{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0}
+
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin:24px 0}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin:24px 0}
+.mini-card{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:20px;text-align:center}
+.mini-card .icon{font-size:30px;margin-bottom:10px}
+.mini-card .label{font-family:var(--head);font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:6px}
+.mini-card .val{font-family:var(--head);font-size:17px;font-weight:800;color:var(--text)}
+
+.row{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.spacer{flex:1}
+.topic-btn{display:flex;align-items:flex-start;gap:16px;width:100%;text-align:left;padding:22px;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--surface);color:var(--text);cursor:pointer;font-size:15px;font-weight:600;font-family:var(--head);transition:all .2s;line-height:1.5;margin-bottom:12px}
+.topic-btn:hover{background:var(--light);border-color:var(--primary);transform:translateX(4px)}
+.topic-num{background:var(--primary-bg);color:var(--primary);border-radius:8px;padding:6px 12px;font-family:var(--mono);font-size:13px;font-weight:600;flex-shrink:0;margin-top:1px}
+
+.opt{display:block;width:100%;text-align:left;padding:18px 22px;margin:12px 0;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--surface);color:var(--text);cursor:pointer;font-size:16px;transition:all .2s;line-height:1.6;font-family:var(--sans)}
+.opt:hover:not(:disabled){background:var(--light);border-color:#3A527A;transform:translateX(3px)}
+.opt.ok{border-color:var(--success);background:var(--success-bg);color:var(--success);font-weight:700}
+.opt.no{border-color:var(--danger);background:var(--danger-bg);color:var(--danger)}
+.explain{background:#050810;border-left:4px solid var(--purple);border-radius:0 var(--radius-sm) var(--radius-sm) 0;padding:24px 28px;margin-top:28px;font-size:15.5px;line-height:1.75;color:#C4B5FD}
+
+.progress-bar{height:6px;background:var(--border);border-radius:10px;margin-bottom:28px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--primary-dark),var(--primary));border-radius:10px;transition:width .4s}
+
+.ri{margin-bottom:28px;border-left:6px solid transparent;border-radius:16px;background:var(--surface);overflow:hidden;display:flex;flex-direction:column}
+.rok{border-left-color:var(--success)!important}
+.rno{border-left-color:var(--danger)!important}
+.rskip{border-left-color:var(--warning)!important}
+.ri-content{padding:32px 36px}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.animate-in{animation:fadeUp .4s ease forwards}
+
+.phase-step{display:flex;gap:16px;align-items:flex-start;padding:16px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);margin-bottom:12px}
+.phase-num{background:var(--primary);color:#001F2E;border-radius:8px;padding:8px 14px;font-family:var(--mono);font-size:15px;font-weight:700;flex-shrink:0;line-height:1}
+.phase-content strong{display:block;font-family:var(--head);font-size:15px;margin-bottom:4px}
+.phase-content p{margin:0;font-size:14.5px}
+
+@media(max-width:600px){
+  .app{padding:14px 12px 80px}
+  .grid2{grid-template-columns:1fr;gap:14px}
+  .grid3{grid-template-columns:1fr 1fr;gap:12px}
+  .ri-content{padding:20px 22px!important}
+  h1{font-size:28px}
+  h2{font-size:19px}
+  .card{padding:22px}
+  .opt{padding:16px 18px;font-size:15px}
+  .topic-btn{padding:16px}
+}
+</style>
+</head>
+<body>
+<div class="app" id="root"></div>
+<script>
+// ===== MATERI PEMBELAJARAN =====
+const SL=[
+
+// --- SLIDE 1 ---
+{b:"Modul 1 · Fondasi Keamanan",t:"Apa Itu Keamanan Informasi?",c:`
+<h2>🏦 Bayangkan Sebuah Bank Digital</h2>
+<p>Selamat datang di dunia keamanan siber! Sebelum kita masuk ke hal-hal teknis, mari kita bayangkan satu skenario sederhana.</p>
+<div class="story-box">
+  <strong>Analogi Bank Digital:</strong><br>
+  Bayangkan kamu punya rekening bank online. Di dalamnya ada uang, data pribadi, dan riwayat transaksi. Nah, <em>keamanan informasi</em> itu ibarat sistem keamanan banknya — ada brankas (enkripsi), satpam (firewall), CCTV (monitoring), dan aturan siapa yang boleh masuk (access control).<br><br>
+  Tanpa sistem keamanan itu, orang jahat bisa <strong>mencuri uangmu, mengubah saldo, atau mengunci rekening kamu</strong>.
+</div>
+<h3>Definisi Resmi</h3>
+<p>Keamanan informasi adalah kondisi di mana <strong>informasi dan infrastruktur terlindungi</strong> dari pencurian, perusakan, dan gangguan. Tujuannya: membuat kemungkinan serangan <em>serendah mungkin</em> atau dalam batas yang bisa ditoleransi.</p>
+<h3>Mengapa Kita Butuh Keamanan?</h3>
+<ul>
+  <li>Teknologi semakin canggih, tapi juga semakin rentan</li>
+  <li>Data adalah aset paling berharga di era digital</li>
+  <li>Pelanggaran keamanan bisa merugikan reputasi & finansial perusahaan</li>
+  <li>Jaringan yang semakin kompleks = celah yang semakin banyak</li>
+  <li>Kebijakan BYOD (Bawa Perangkat Sendiri) membuka risiko baru</li>
+</ul>
+<div class="warn-box">⚡ <strong>Ingat:</strong> Keamanan bukan hanya soal teknologi — ini juga soal <em>kebijakan, manusia, dan proses</em>.</div>
+`},
+
+// --- SLIDE 2 ---
+{b:"Modul 1 · Fondasi Keamanan",t:"CIA Triad — Tiga Pilar Keamanan",c:`
+<h2>🔐 Tiga Pilar Wajib Tahu</h2>
+<p>Dalam dunia keamanan informasi, ada tiga konsep fundamental yang disebut <strong>CIA Triad</strong>. Ini adalah fondasi dari segalanya.</p>
+<div class="grid3">
+  <div class="mini-card">
+    <div class="icon">🔒</div>
+    <div class="label">Confidentiality</div>
+    <div class="val" style="color:var(--primary)">Kerahasiaan</div>
+  </div>
+  <div class="mini-card">
+    <div class="icon">✅</div>
+    <div class="label">Integrity</div>
+    <div class="val" style="color:var(--success)">Integritas</div>
+  </div>
+  <div class="mini-card">
+    <div class="icon">⚡</div>
+    <div class="label">Availability</div>
+    <div class="val" style="color:var(--warning)">Ketersediaan</div>
+  </div>
+</div>
+
+<div class="story-box">
+  <strong>🔒 Confidentiality (Kerahasiaan):</strong> Informasi hanya boleh diakses oleh orang yang berwenang. Analoginya: hanya nasabah yang boleh lihat rekening mereka sendiri — bukan orang lain.<br><br>
+  <strong>✅ Integrity (Integritas):</strong> Data tidak boleh diubah oleh pihak yang tidak berwenang. Analoginya: saldo rekeningmu tidak boleh diubah sembarangan oleh siapapun selain transaksi yang sah.<br><br>
+  <strong>⚡ Availability (Ketersediaan):</strong> Sistem harus bisa diakses oleh pengguna yang berwenang kapanpun dibutuhkan. Analoginya: ATM harus bisa dipakai 24 jam — tidak boleh mati terus.
+</div>
+
+<h3>Dua Elemen Tambahan</h3>
+<ul>
+  <li><strong>Authenticity (Keaslian):</strong> Memastikan data atau komunikasi itu genuain alias asli, bukan palsu</li>
+  <li><strong>Non-Repudiation (Tidak Bisa Menyangkal):</strong> Pengirim pesan tidak bisa menyangkal bahwa dia yang mengirimnya, dan penerima tidak bisa menyangkal bahwa dia menerimanya</li>
+</ul>
+<div class="warn-box">💡 Ketika seseorang menyerang sistem, mereka biasanya menyerang salah satu dari tiga pilar CIA ini — entah mencuri data (confidentiality), mengubah data (integrity), atau membuat sistem down (availability).</div>
+`},
+
+// --- SLIDE 3 ---
+{b:"Modul 1 · Fondasi Keamanan",t:"Segitiga Keamanan-Fungsi-Kegunaan",c:`
+<h2>⚖️ Trade-off yang Harus Dipahami</h2>
+<p>Ada sebuah konsep penting yang sering dilupakan pemula: <strong>keamanan tidak bisa maksimal sekaligus dengan fungsi dan kemudahan pakai</strong>.</p>
+
+<div class="story-box">
+  <strong>Analogi Kendaraan:</strong><br>
+  Bayangkan sebuah mobil. Jika kamu pasang 10 lapis kunci, alarm, GPS tracker, dan brankas di dalamnya — mobil itu jadi super aman, tapi kamu butuh 15 menit hanya untuk masuk ke mobil sendiri (tidak nyaman). Sebaliknya, kalau dibiarkan tanpa kunci dan terbuka — nyaman sekali, tapi langsung dicuri.<br><br>
+  Keamanan yang ideal adalah <em>menemukan titik tengah</em> yang pas untuk kebutuhan organisasi.
+</div>
+
+<h3>Tiga Sudut Segitiga</h3>
+<div class="grid3">
+  <div class="mini-card">
+    <div class="icon">🛡️</div>
+    <div class="label">Security</div>
+    <div class="val" style="color:var(--danger)">Pembatasan Akses</div>
+  </div>
+  <div class="mini-card">
+    <div class="icon">⚙️</div>
+    <div class="label">Functionality</div>
+    <div class="val" style="color:var(--primary)">Fitur Sistem</div>
+  </div>
+  <div class="mini-card">
+    <div class="icon">😊</div>
+    <div class="label">Usability</div>
+    <div class="val" style="color:var(--success)">Kemudahan Pakai</div>
+  </div>
+</div>
+<p>Jika kamu <strong>menambah keamanan</strong> (geser bola ke sudut Security), maka fungsi dan kemudahan pakai otomatis berkurang. Begitu sebaliknya.</p>
+
+<h3>Tantangan Keamanan Saat Ini</h3>
+<ul>
+  <li>Regulasi pemerintah yang terus berubah</li>
+  <li>Kurangnya tenaga ahli keamanan siber</li>
+  <li>Sulit memusatkan keamanan di lingkungan yang terdistribusi</li>
+  <li>Data sensitif dipindahkan ke cloud tanpa konfigurasi yang benar</li>
+  <li>Kebijakan BYOD yang sulit dikontrol</li>
+</ul>
+`},
+
+// --- SLIDE 4 ---
+{b:"Modul 1 · Fondasi Keamanan",t:"Klasifikasi & Vektor Serangan",c:`
+<h2>🗡️ Cara Penyerang Menyerang</h2>
+<p>Serangan siber tidak datang dalam satu bentuk. Pahami dulu <strong>jenis dan jalur serangan</strong> yang umum.</p>
+
+<h3>Klasifikasi Serangan</h3>
+<div class="grid2">
+  <div style="background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:18px">
+    <div style="font-family:var(--head);color:var(--primary);font-weight:700;margin-bottom:10px">👁️ Passive Attack</div>
+    <p style="font-size:14.5px;margin:0">Mengintai tanpa mengganggu. Contoh: sniffing (menyadap lalu lintas data), eavesdropping</p>
+  </div>
+  <div style="background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:18px">
+    <div style="font-family:var(--head);color:var(--danger);font-weight:700;margin-bottom:10px">💥 Active Attack</div>
+    <p style="font-size:14.5px;margin:0">Mengganggu atau merusak. Contoh: DoS, Man-in-the-Middle, SQL Injection, Session Hijacking</p>
+  </div>
+  <div style="background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:18px">
+    <div style="font-family:var(--head);color:var(--warning);font-weight:700;margin-bottom:10px">🤝 Close-in Attack</div>
+    <p style="font-size:14.5px;margin:0">Penyerang harus dekat secara fisik. Contoh: shoulder surfing, dumpster diving</p>
+  </div>
+  <div style="background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:18px">
+    <div style="font-family:var(--head);color:var(--purple);font-weight:700;margin-bottom:10px">🏢 Insider Attack</div>
+    <p style="font-size:14.5px;margin:0">Dilakukan orang dalam organisasi yang punya akses. Contoh: karyawan yang menanam malware</p>
+  </div>
+</div>
+
+<h3>Vektor Serangan (Jalur Masuk Penyerang)</h3>
+<ul>
+  <li><strong>Cloud Computing Threats:</strong> Kelemahan di aplikasi kloud bisa bocorkan data klien lain</li>
+  <li><strong>APT (Advanced Persistent Threats):</strong> Serangan tersembunyi jangka panjang untuk mencuri data</li>
+  <li><strong>Ransomware:</strong> Mengenkripsi file korban dan minta tebusan</li>
+  <li><strong>Mobile Threats:</strong> Aplikasi mobile berbahaya</li>
+  <li><strong>Botnet:</strong> Jaringan komputer terinfeksi yang dikendalikan penyerang</li>
+  <li><strong>Phishing:</strong> Email palsu yang mengelabui korban</li>
+  <li><strong>IoT Threats:</strong> Perangkat pintar (kulkas, kamera) yang rentan dibobol</li>
+</ul>
+
+<div class="danger-box">⚠️ <strong>Rumus serangan:</strong> Serangan = Motif + Metode + Kerentanan. Hilangkan salah satunya, serangan bisa gagal!</div>
+`},
+
+// --- SLIDE 5 ---
+{b:"Modul 1 · Hukum & Regulasi",t:"Regulasi Keamanan Informasi Dunia",c:`
+<h2>📜 Hukum yang Mengatur Keamanan Data</h2>
+<p>Keamanan informasi bukan hanya soal teknis — ada juga aspek <strong>hukum dan regulasi</strong> yang harus dipatuhi organisasi.</p>
+
+<h3>Regulasi Penting yang Wajib Diketahui</h3>
+
+<div class="phase-step">
+  <div class="phase-num">PCI DSS</div>
+  <div class="phase-content">
+    <strong>Payment Card Industry Data Security Standard</strong>
+    <p>Standar keamanan untuk organisasi yang menangani kartu kredit/debit. Wajib bagi merchant dan prosesor pembayaran. Pelanggaran bisa berakibat denda atau pencabutan hak memproses kartu.</p>
+  </div>
+</div>
+<div class="phase-step">
+  <div class="phase-num">ISO 27001</div>
+  <div class="phase-content">
+    <strong>Information Security Management System</strong>
+    <p>Standar internasional untuk pengelolaan keamanan informasi. Membantu organisasi membangun, menerapkan, dan meningkatkan sistem manajemen keamanan.</p>
+  </div>
+</div>
+<div class="phase-step">
+  <div class="phase-num">HIPAA</div>
+  <div class="phase-content">
+    <strong>Health Insurance Portability and Accountability Act (AS)</strong>
+    <p>Mengatur keamanan data kesehatan. Mencakup aturan privasi, keamanan, dan transaksi elektronik untuk informasi kesehatan pasien.</p>
+  </div>
+</div>
+<div class="phase-step">
+  <div class="phase-num">GDPR</div>
+  <div class="phase-content">
+    <strong>General Data Protection Regulation (Uni Eropa)</strong>
+    <p>Berlaku sejak 25 Mei 2018. Salah satu regulasi privasi paling ketat di dunia. Denda bisa mencapai puluhan juta euro untuk pelanggaran. Prinsip: lawfulness, purpose limitation, data minimization, accuracy, storage limitation, integrity, dan accountability.</p>
+  </div>
+</div>
+<div class="phase-step">
+  <div class="phase-num">SOX</div>
+  <div class="phase-content">
+    <strong>Sarbanes-Oxley Act (AS, 2002)</strong>
+    <p>Melindungi investor dengan meningkatkan akurasi laporan keuangan korporasi. Mengatur tanggung jawab eksekutif atas laporan keuangan.</p>
+  </div>
+</div>
+<div class="phase-step">
+  <div class="phase-num">DMCA</div>
+  <div class="phase-content">
+    <strong>Digital Millennium Copyright Act</strong>
+    <p>Hukum hak cipta AS yang melarang pengelakan teknologi perlindungan karya berhak cipta.</p>
+  </div>
+</div>
+`},
+
+// --- SLIDE 6 ---
+{b:"Modul 2 · Ethical Hacking",t:"Apa Itu Hacking & Ethical Hacking?",c:`
+<h2>🎭 Dua Sisi Mata Koin</h2>
+<p>Hacking sering terdengar negatif — tapi sebenarnya ada <em>hacking yang legal dan bermanfaat</em>. Mari kita bedakan.</p>
+
+<div class="story-box">
+  <strong>Analogi Penyamun vs Satpam Ahli:</strong><br>
+  Bayangkan sebuah bank menyewa seorang mantan perampok yang taubat untuk "mencoba merampok" bank mereka. Bukan untuk sungguhan, tapi untuk <em>menemukan celah keamanan</em> sebelum perampok sungguhan menemukannya. Itulah konsep dasar <strong>Ethical Hacking</strong>.
+</div>
+
+<h3>Definisi</h3>
+<ul>
+  <li><strong>Hacking:</strong> Mengeksploitasi kerentanan sistem untuk mendapatkan akses tidak sah. Bisa digunakan untuk mencuri data, merusak sistem, atau tujuan jahat lainnya.</li>
+  <li><strong>Ethical Hacking:</strong> Menggunakan teknik hacking yang sama, tapi dengan <em>izin resmi</em> dari pemilik sistem, untuk menemukan celah keamanan sebelum penyerang nyata menemukan mereka.</li>
+</ul>
+
+<h3>Kenapa Ethical Hacking Diperlukan?</h3>
+<ul>
+  <li>Untuk menganalisis dan memperkuat postur keamanan organisasi</li>
+  <li>Untuk menemukan kerentanan sebelum dieksploitasi penjahat</li>
+  <li>Untuk melindungi data pelanggan</li>
+  <li>Untuk meningkatkan kesadaran keamanan di seluruh organisasi</li>
+  <li>Untuk memastikan kepatuhan terhadap standar hukum dan industri</li>
+</ul>
+
+<div class="warn-box">🔑 <strong>Kunci Ethical Hacking:</strong> Harus ada izin tertulis (written permission) dari pemilik sistem. Tanpa izin = ilegal, tidak peduli seberapa baik niatmu!</div>
+
+<h3>Skill Ethical Hacker</h3>
+<div class="grid2">
+  <div style="background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:16px">
+    <strong style="color:var(--primary)">Technical Skills</strong>
+    <ul style="font-size:14px;margin-top:8px">
+      <li>Ahli OS: Windows, Linux, Unix</li>
+      <li>Networking & protokol</li>
+      <li>Pemrograman & scripting</li>
+      <li>Familiar dengan alat hacking</li>
+    </ul>
+  </div>
+  <div style="background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:16px">
+    <strong style="color:var(--success)">Non-Technical Skills</strong>
+    <ul style="font-size:14px;margin-top:8px">
+      <li>Etika kerja yang kuat</li>
+      <li>Problem solving</li>
+      <li>Komunikasi yang baik</li>
+      <li>Patuh pada kebijakan keamanan</li>
+    </ul>
+  </div>
+</div>
+`},
+
+// --- SLIDE 7 ---
+{b:"Modul 2 · Ethical Hacking",t:"Kelas-Kelas Hacker",c:`
+<h2>🎩 Bukan Semua Hacker Sama</h2>
+<p>Di dunia nyata, hacker dikategorikan berdasarkan <strong>motivasi dan cara mereka bekerja</strong>. Kenali perbedaannya!</p>
+
+<div class="phase-step" style="border-color:rgba(0,0,0,0)">
+  <div class="phase-num" style="background:var(--danger);color:white">Black Hat</div>
+  <div class="phase-content"><strong>Penjahat Siber</strong><p>Hacker berbahaya yang menggunakan keahlian untuk tujuan jahat. Disebut juga "crackers". Mencuri data, merusak sistem, dan tidak peduli hukum.</p></div>
+</div>
+<div class="phase-step">
+  <div class="phase-num" style="background:var(--success);color:#001F0F">White Hat</div>
+  <div class="phase-content"><strong>Pahlawan Keamanan</strong><p>Hacker etis yang bekerja untuk pertahanan. Juga disebut security analyst atau penetration tester. Bekerja dengan izin resmi.</p></div>
+</div>
+<div class="phase-step">
+  <div class="phase-num" style="background:#888;color:white">Gray Hat</div>
+  <div class="phase-content"><strong>Di Antara Keduanya</strong><p>Kadang ofensif, kadang defensif. Mungkin menemukan kerentanan tanpa izin, tapi tidak mengeksploitasinya untuk keuntungan pribadi.</p></div>
+</div>
+<div class="phase-step">
+  <div class="phase-num" style="background:var(--purple);color:white">Hacktivism</div>
+  <div class="phase-content"><strong>Hacker Berideologi</strong><p>Hacker yang dimotivasi oleh agenda politik atau sosial. Meretas untuk menyebarkan pesan atau men-deface website.</p></div>
+</div>
+<div class="phase-step">
+  <div class="phase-num" style="background:var(--warning);color:#001F0F">Script Kiddie</div>
+  <div class="phase-content"><strong>Pemula Berbahaya</strong><p>Tidak paham cara kerja serangan, hanya menggunakan tools yang dibuat orang lain. Tidak punya keahlian teknis mendalam, tapi tetap berbahaya.</p></div>
+</div>
+<div class="phase-step">
+  <div class="phase-num" style="background:var(--accent);color:white">State-Sponsored</div>
+  <div class="phase-content"><strong>Hacker Negara</strong><p>Dipekerjakan pemerintah untuk memata-matai atau menyerang infrastruktur negara lain. Sangat berbahaya dan memiliki sumber daya besar.</p></div>
+</div>
+`},
+
+// --- SLIDE 8 ---
+{b:"Modul 2 · Ethical Hacking",t:"5 Fase Hacking",c:`
+<h2>🔄 Siklus Serangan Siber</h2>
+<p>Hacking bukan proses acak — ada <strong>5 fase terurut</strong> yang biasanya dilakukan penyerang. Memahami ini membantu kita bertahan.</p>
+
+<div class="phase-step">
+  <div class="phase-num">01</div>
+  <div class="phase-content">
+    <strong>Reconnaissance (Pengintaian)</strong>
+    <p>Fase mengumpulkan informasi tentang target <em>sebelum</em> menyerang. Ada dua jenis: <strong>Passive</strong> (tanpa interaksi langsung, contoh: googling, cek whois) dan <strong>Active</strong> (berinteraksi langsung, contoh: menelepon help desk target).</p>
+  </div>
+</div>
+<div class="phase-step">
+  <div class="phase-num">02</div>
+  <div class="phase-content">
+    <strong>Scanning (Pemindaian)</strong>
+    <p>Memindai jaringan target untuk menemukan <em>celah masuk</em>: port terbuka, OS yang digunakan, layanan yang berjalan, dll. Menggunakan tools seperti Nmap, port scanner, vulnerability scanner.</p>
+  </div>
+</div>
+<div class="phase-step">
+  <div class="phase-num">03</div>
+  <div class="phase-content">
+    <strong>Gaining Access (Mendapatkan Akses)</strong>
+    <p>Inilah fase serangan sebenarnya. Penyerang mengeksploitasi kerentanan yang ditemukan untuk masuk ke sistem: password cracking, buffer overflow, SQL injection, dsb.</p>
+  </div>
+</div>
+<div class="phase-step">
+  <div class="phase-num">04</div>
+  <div class="phase-content">
+    <strong>Maintaining Access (Mempertahankan Akses)</strong>
+    <p>Setelah berhasil masuk, penyerang ingin tetap bisa kembali. Mereka memasang <em>backdoor, rootkit, atau Trojan</em> untuk akses jangka panjang tanpa terdeteksi.</p>
+  </div>
+</div>
+<div class="phase-step">
+  <div class="phase-num">05</div>
+  <div class="phase-content">
+    <strong>Clearing Tracks (Menghapus Jejak)</strong>
+    <p>Penyerang menghapus log aktivitas mereka agar tidak tertangkap. Menimpa log server, system, dan aplikasi untuk menghilangkan bukti.</p>
+  </div>
+</div>
+
+<div class="warn-box">🎯 <strong>Ingat:</strong> Cyber Kill Chain adalah kerangka kerja yang mirip, digunakan tim keamanan untuk mengidentifikasi dan menghentikan serangan di setiap fase.</div>
+`},
+
+// --- SLIDE 9 ---
+{b:"Modul 3 · Ancaman & Malware",t:"Mengenal Malware dari Nol",c:`
+<h2>🦠 Apa Itu Malware?</h2>
+<p>Malware = <em>Malicious Software</em> (Perangkat Lunak Berbahaya). Ini adalah kategori besar dari semua software yang dirancang untuk merusak atau mengambil alih sistem tanpa izin.</p>
+
+<div class="story-box">
+  <strong>Analogi Penyakit di Tubuh:</strong><br>
+  Bayangkan komputermu sebagai tubuh manusia. Malware itu seperti berbagai jenis penyakit: ada yang <em>virus</em> (menular), ada <em>parasit</em> (menempel diam-diam), ada <em>tumor</em> yang merusak perlahan, dan ada yang langsung <em>mengunci organ vital</em> (ransomware). Antivirus adalah sistem imun digitalmu.
+</div>
+
+<h3>Cara Malware Masuk ke Sistem</h3>
+<div class="tag-row">
+  <span class="badge br">Email Attachment</span>
+  <span class="badge br">Download dari Internet</span>
+  <span class="badge br">USB / Flashdisk</span>
+  <span class="badge br">Bug Browser</span>
+  <span class="badge br">Situs Tidak Terpercaya</span>
+  <span class="badge br">Bluetooth/WiFi</span>
+  <span class="badge br">Instalasi Malware Lain</span>
+  <span class="badge br">Instant Messenger</span>
+</div>
+
+<h3>10 Jenis Malware Utama</h3>
+<div class="grid2">
+  <div style="background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px">
+    <strong style="color:var(--danger)">1. Trojan</strong> — Menyamar sebagai program baik
+  </div>
+  <div style="background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px">
+    <strong style="color:var(--danger)">2. Virus</strong> — Menempel & mereplikasi diri
+  </div>
+  <div style="background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px">
+    <strong style="color:var(--warning)">3. Ransomware</strong> — Mengunci file, minta tebusan
+  </div>
+  <div style="background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px">
+    <strong style="color:var(--warning)">4. Worm</strong> — Menyebar sendiri via jaringan
+  </div>
+  <div style="background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px">
+    <strong style="color:var(--purple)">5. Rootkit</strong> — Menyembunyikan diri di sistem
+  </div>
+  <div style="background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px">
+    <strong style="color:var(--purple)">6. Spyware</strong> — Memata-matai diam-diam
+  </div>
+  <div style="background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px">
+    <strong style="color:var(--primary)">7. Keylogger</strong> — Merekam ketukan keyboard
+  </div>
+  <div style="background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px">
+    <strong style="color:var(--primary)">8. Botnet</strong> — Jaringan komputer yang dikontrol
+  </div>
+  <div style="background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px">
+    <strong style="color:var(--accent)">9. PUA/Grayware</strong> — Software tidak diinginkan
+  </div>
+  <div style="background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px">
+    <strong style="color:var(--accent)">10. Fileless Malware</strong> — Tinggal di RAM, tak ada file
+  </div>
+</div>
+`},
+
+// --- SLIDE 10 ---
+{b:"Modul 3 · Ancaman & Malware",t:"Trojan, Virus & Ransomware Detail",c:`
+<h2>🐴 Trojan — Kuda Kayu Digital</h2>
+<p>Trojan menggunakan nama dari kisah mitologi Yunani: tentara bersembunyi di dalam kuda kayu raksasa. Sama halnya, Trojan <strong>menyamar sebagai program yang berguna</strong>, padahal di dalamnya ada kode berbahaya.</p>
+
+<div class="danger-box">
+  <strong>Ciri-ciri komputer terkena Trojan:</strong> Antivirus mati sendiri, wallpaper berubah sendiri, muncul pop-up aneh, browser membuka halaman sendiri, warna tampilan OS berubah
+</div>
+
+<h3>🦠 Virus vs Worm — Apa Bedanya?</h3>
+<div class="grid2">
+  <div style="background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:18px">
+    <strong style="color:var(--danger)">Virus</strong>
+    <ul style="font-size:14px;margin-top:10px">
+      <li>Butuh file <em>inang</em> untuk menyebar (tidak bisa sendiri)</li>
+      <li>Menempel ke program lain</li>
+      <li>Aktif ketika program inang dijalankan</li>
+      <li>Bisa merusak, mengenkripsi, atau menghapus file</li>
+    </ul>
+  </div>
+  <div style="background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:18px">
+    <strong style="color:var(--warning)">Worm</strong>
+    <ul style="font-size:14px;margin-top:10px">
+      <li>Bisa mereplikasi diri <em>tanpa inang</em></li>
+      <li>Menyebar otomatis lewat jaringan</li>
+      <li>Tidak perlu tindakan pengguna</li>
+      <li>Menghabiskan bandwidth dan sumber daya</li>
+    </ul>
+  </div>
+</div>
+
+<h3>💰 Ransomware — Penyandera Digital</h3>
+<div class="danger-box">
+  Ransomware mengenkripsi semua file korban (dokumen, foto, database) lalu menampilkan pesan: <em>"Bayar sekian bitcoin dalam 48 jam atau data kamu akan dihapus selamanya."</em><br><br>
+  Contoh ransomware terkenal: <strong>Dharma, WannaCry, CryptoLocker, Petya, REvil</strong>
+</div>
+
+<h3>🕵️ Rootkit</h3>
+<p>Rootkit adalah malware yang <strong>menyembunyikan keberadaannya sendiri</strong> dan aktivitas berbahaya lainnya dari sistem operasi. Rootkit mengganti fungsi-fungsi sistem OS dengan versi berbahaya. Sangat susah dideteksi!</p>
+
+<h3>🔑 Keylogger</h3>
+<p>Merekam setiap tombol yang kamu tekan. Nama pengguna, password, nomor kartu kredit — semuanya terekam dan dikirim ke penyerang.</p>
+`},
+
+// --- SLIDE 11 ---
+{b:"Modul 3 · Ancaman & Malware",t:"Spyware, Botnet & Fileless Malware",c:`
+<h2>👁️ Spyware — Mata-mata di Komputermu</h2>
+<p>Spyware <strong>memata-matai aktivitasmu secara diam-diam</strong> tanpa kamu tahu — merekam aktivitas browsing, mencuri data pribadi, mengubah pengaturan browser.</p>
+
+<div class="warn-box">
+  <strong>Yang bisa dilakukan spyware:</strong>
+  <ul style="margin-top:8px">
+    <li>Mencuri informasi pribadi dan mengirim ke server penyerang</li>
+    <li>Mengubah pengaturan firewall dan browser</li>
+    <li>Mengarahkan browser ke situs iklan</li>
+    <li>Menampilkan pop-up iklan</li>
+  </ul>
+</div>
+
+<h2>🤖 Botnet — Pasukan Zombie Digital</h2>
+<div class="story-box">
+  <strong>Analogi:</strong> Bayangkan ribuan komputer yang sudah terinfeksi malware — pemiliknya tidak sadar. Semua komputer ini dikontrol secara diam-diam oleh satu penyerang (<em>bot herder</em>). Ketika penyerang perintahkan "serang website X sekarang", semua komputer zombie itu menyerang serentak. Inilah <strong>botnet</strong> — basis serangan DDoS.
+</div>
+
+<h3>Kegunaan Botnet oleh Penyerang</h3>
+<ul>
+  <li>Melancarkan serangan DDoS masif</li>
+  <li>Mengirim spam email dalam jumlah besar</li>
+  <li>Click fraud (mengklik iklan secara otomatis)</li>
+  <li>Mencuri informasi akun dari komputer yang terinfeksi</li>
+  <li>Crypto mining tanpa sepengetahuan pemilik</li>
+</ul>
+
+<h2>👻 Fileless Malware — Hantu yang Tak Bisa Dipindai</h2>
+<p>Fileless malware adalah evolusi berbahaya dari malware biasa. Ia <strong>tidak menyimpan file apapun di disk</strong> — ia hidup murni di dalam RAM (memory) komputer.</p>
+
+<div class="danger-box">
+  <strong>Kenapa berbahaya sekali?</strong> Antivirus konvensional bekerja dengan memindai file. Kalau tidak ada file yang disimpan, antivirus tidak bisa mendeteksinya! Fileless malware menyuntikkan kode jahat langsung ke proses yang berjalan seperti Word, PowerShell, atau browser.
+</div>
+`},
+
+// --- SLIDE 12 ---
+{b:"Modul 11 · Keamanan Data",t:"Enkripsi Data — Pelindung Informasi Paling Penting",c:`
+<h2>🔐 Mengamankan Data di Tiga Kondisi</h2>
+<p>Data bisa berada dalam tiga kondisi yang semuanya perlu dilindungi dengan cara berbeda:</p>
+
+<div class="grid3">
+  <div class="mini-card">
+    <div class="icon">💾</div>
+    <div class="label">Data at Rest</div>
+    <div class="val" style="font-size:14px;color:var(--primary)">Data tersimpan di disk/database</div>
+  </div>
+  <div class="mini-card">
+    <div class="icon">⚡</div>
+    <div class="label">Data in Use</div>
+    <div class="val" style="font-size:14px;color:var(--warning)">Data sedang diproses di memori</div>
+  </div>
+  <div class="mini-card">
+    <div class="icon">📡</div>
+    <div class="label">Data in Transit</div>
+    <div class="val" style="font-size:14px;color:var(--success)">Data sedang berpindah lewat jaringan</div>
+  </div>
+</div>
+
+<h3>Teknologi Enkripsi Data</h3>
+
+<div class="phase-step">
+  <div class="phase-num">💿</div>
+  <div class="phase-content">
+    <strong>Disk Encryption (Full Disk Encryption)</strong>
+    <p>Mengenkripsi <em>seluruh isi hard drive</em>. Kalau laptop dicuri, datanya tetap tidak bisa dibaca tanpa password. Tools: <strong>BitLocker</strong> (Windows), <strong>FileVault</strong> (Mac), <strong>VeraCrypt</strong> (cross-platform). Pengecualian: Master Boot Record (MBR) tidak dienkripsi.</p>
+  </div>
+</div>
+<div class="phase-step">
+  <div class="phase-num">📁</div>
+  <div class="phase-content">
+    <strong>File-level Encryption</strong>
+    <p>Mengenkripsi file atau folder tertentu saja, bukan seluruh disk. Di Windows ada fitur <strong>EFS (Encrypting File System)</strong>. Lebih fleksibel dan granular dari full disk encryption.</p>
+  </div>
+</div>
+<div class="phase-step">
+  <div class="phase-num">💾</div>
+  <div class="phase-content">
+    <strong>Removable Media Encryption</strong>
+    <p>Mengenkripsi USB flash drive, hard disk eksternal, kamera digital. Mencegah akses tidak sah jika perangkat hilang atau dicuri. Di Windows bisa pakai <strong>BitLocker To Go</strong>.</p>
+  </div>
+</div>
+
+<div class="success-box">🛡️ <strong>Prinsip enkripsi:</strong> Data yang terenkripsi tidak dapat dibaca tanpa kunci dekripsi yang benar. Bahkan jika penyerang mendapatkan file-nya, mereka hanya melihat deretan karakter acak yang tidak bermakna.</div>
+`},
+
+// --- SLIDE 13 ---
+{b:"Modul 11 · Keamanan Data",t:"Backup Data, RAID & DLP",c:`
+<h2>💾 Backup — Jaring Pengaman Digital</h2>
+<p>Backup adalah proses membuat <strong>salinan cadangan data</strong> yang bisa digunakan saat data utama hilang atau rusak.</p>
+
+<h3>Tiga Jenis Backup</h3>
+<div class="grid3">
+  <div class="mini-card">
+    <div class="icon">📦</div>
+    <div class="label">Full Backup</div>
+    <div class="val" style="font-size:13px;color:#B8C8DC">Menyalin SEMUA data. Lengkap tapi butuh waktu & space terbesar.</div>
+  </div>
+  <div class="mini-card">
+    <div class="icon">📊</div>
+    <div class="label">Differential</div>
+    <div class="val" style="font-size:13px;color:#B8C8DC">Data yang berubah SEJAK full backup terakhir.</div>
+  </div>
+  <div class="mini-card">
+    <div class="icon">⚡</div>
+    <div class="label">Incremental</div>
+    <div class="val" style="font-size:13px;color:#B8C8DC">Data yang berubah SEJAK backup apapun terakhir. Paling efisien.</div>
+  </div>
+</div>
+
+<h3>RAID — Teknologi Perlindungan Disk</h3>
+<p><strong>RAID (Redundant Array of Independent Disks)</strong> adalah cara menggabungkan beberapa hard drive menjadi satu unit dengan toleransi kegagalan.</p>
+<div class="grid2">
+  <div style="background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px">
+    <strong style="color:var(--primary)">RAID 0 — Striping</strong><p style="font-size:13.5px;margin:6px 0 0">Data dibagi merata ke semua disk. Performa tinggi tapi TIDAK ada redundansi — 1 disk rusak = semua data hilang!</p>
+  </div>
+  <div style="background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px">
+    <strong style="color:var(--success)">RAID 1 — Mirroring</strong><p style="font-size:13.5px;margin:6px 0 0">Data disalin identik ke 2 disk. Jika 1 rusak, data masih aman di disk lain. Redundansi tinggi.</p>
+  </div>
+  <div style="background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px">
+    <strong style="color:var(--warning)">RAID 5 — Striping+Parity</strong><p style="font-size:13.5px;margin:6px 0 0">Balance antara performa dan redundansi. Bisa bertahan jika 1 disk rusak. Butuh minimal 3 disk.</p>
+  </div>
+  <div style="background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px">
+    <strong style="color:var(--purple)">RAID 10 — Stripe+Mirror</strong><p style="font-size:13.5px;margin:6px 0 0">Kombinasi RAID 0 dan RAID 1. Performa tinggi + redundansi. Butuh minimal 4 disk.</p>
+  </div>
+</div>
+
+<h3>DLP — Data Loss Prevention</h3>
+<p>DLP adalah kumpulan solusi software yang <strong>mencegah data sensitif keluar dari organisasi</strong> tanpa izin. Ada tiga jenis: <em>Endpoint DLP</em> (melindungi perangkat), <em>Network DLP</em> (memantau data yang bergerak di jaringan), dan <em>Storage DLP</em> (melindungi data yang tersimpan).</p>
+`},
+
+// --- SLIDE 14 ---
+{b:"Modul 5 · Social Engineering",t:"Apa Itu Social Engineering?",c:`
+<h2>🧠 Meretas Manusia, Bukan Mesin</h2>
+<p>Social Engineering adalah <strong>seni memanipulasi manusia</strong> untuk mengungkapkan informasi rahasia. Ini adalah serangan yang paling berbahaya karena menyasar kelemahan yang paling sulit diperbaiki: <em>psikologi manusia</em>.</p>
+
+<div class="story-box">
+  <strong>Analogi Pesulap:</strong><br>
+  Bayangkan seorang pesulap yang meminta kamu menebak kartu. Kamu merasa memilih sendiri, padahal sebenarnya kamu sudah <em>dimanipulasi</em> untuk memilih kartu yang dia inginkan. Itulah social engineering — korban merasa melakukan hal yang wajar, padahal sudah dikontrol.
+</div>
+
+<h3>Mengapa Social Engineering Efektif?</h3>
+<ul>
+  <li>Tidak menyerang celah teknis — menyerang <em>psikologi manusia</em></li>
+  <li>Sulit dideteksi (tidak ada "signature" seperti malware)</li>
+  <li>Kebijakan keamanan secanggih apapun kalah dengan human error</li>
+  <li>Tidak ada software/hardware yang bisa sepenuhnya mencegahnya</li>
+</ul>
+
+<h3>Target Umum Social Engineering</h3>
+<div class="tag-row">
+  <span class="badge bo">Resepsionis & Help Desk</span>
+  <span class="badge bo">Eksekutif Senior</span>
+  <span class="badge bo">Staff Teknis</span>
+  <span class="badge bo">Vendor Perusahaan</span>
+  <span class="badge bo">Pengguna & Klien</span>
+  <span class="badge bo">Admin Sistem</span>
+</div>
+
+<h3>Perilaku Manusia yang Dieksploitasi</h3>
+<div class="grid2">
+  <ul>
+    <li><strong>Urgency (Urgensi)</strong> — "Harus sekarang!"</li>
+    <li><strong>Authority (Otoritas)</strong> — "Saya CEO-nya"</li>
+    <li><strong>Greed (Keserakahan)</strong> — "Kamu menang hadiah"</li>
+    <li><strong>Trust (Kepercayaan)</strong> — "Saya temanmu"</li>
+  </ul>
+  <ul>
+    <li><strong>Fear (Ketakutan)</strong> — "Akunmu akan ditutup"</li>
+    <li><strong>Scarcity (Kelangkaan)</strong> — "Terbatas, hanya hari ini"</li>
+    <li><strong>Liking (Rasa Suka)</strong> — "Kita punya kesamaan"</li>
+    <li><strong>Consensus (Konsensus)</strong> — "Semua orang sudah melakukan ini"</li>
+  </ul>
+</div>
+`},
+
+// --- SLIDE 15 ---
+{b:"Modul 5 · Social Engineering",t:"Teknik Social Engineering",c:`
+<h2>🎭 Berbagai Cara Memanipulasi</h2>
+<p>Social engineering dibagi menjadi tiga kategori berdasarkan <em>media yang digunakan</em>:</p>
+
+<h3>👤 Human-based (Tatap Muka / Telepon)</h3>
+<div class="phase-step">
+  <div class="phase-num" style="font-size:12px;padding:8px">Impersonation</div>
+  <div class="phase-content"><strong>Berpura-pura jadi orang lain</strong><p>Contoh: menelepon help desk dan mengaku sebagai eksekutif yang lupa password. "Hei, saya Kevin, CFO. Saya butuh akses sistem SEKARANG, ada meeting penting 10 menit lagi!"</p></div>
+</div>
+<div class="phase-step">
+  <div class="phase-num" style="font-size:12px;padding:8px">Tailgating</div>
+  <div class="phase-content"><strong>Ikut masuk ke area aman</strong><p>Penyerang mengikuti karyawan yang berwenang melewati pintu keamanan tanpa menggunakan ID sendiri.</p></div>
+</div>
+<div class="phase-step">
+  <div class="phase-num" style="font-size:12px;padding:8px">Shoulder Surfing</div>
+  <div class="phase-content"><strong>Mengintip dari belakang</strong><p>Mengamati korban mengetikkan password atau PIN dari jarak dekat.</p></div>
+</div>
+<div class="phase-step">
+  <div class="phase-num" style="font-size:12px;padding:8px">Dumpster Diving</div>
+  <div class="phase-content"><strong>Menggeledah tempat sampah</strong><p>Mencari informasi berharga di kertas yang sudah dibuang: memo, tagihan, data pelanggan yang belum dihancurkan.</p></div>
+</div>
+
+<h3>💻 Computer-based (Lewat Komputer)</h3>
+<ul>
+  <li><strong>Phishing:</strong> Email palsu yang mengelabui korban membuka link atau melampirkan credential</li>
+  <li><strong>Pop-up Windows:</strong> Jendela palsu yang meminta login</li>
+  <li><strong>Scareware:</strong> Menakut-nakuti korban bahwa komputernya terinfeksi dan minta instal "antivirus" palsu</li>
+</ul>
+
+<h3>📱 Mobile-based (Lewat Smartphone)</h3>
+<ul>
+  <li><strong>SMiShing:</strong> SMS phishing yang meminta korban mengklik link atau menelepon nomor tertentu</li>
+  <li><strong>Malicious Apps:</strong> Aplikasi berbahaya yang menyamar sebagai aplikasi populer</li>
+  <li><strong>Repackaging:</strong> Mengemas ulang aplikasi asli dengan tambahan kode berbahaya</li>
+</ul>
+`},
+
+// --- SLIDE 16 ---
+{b:"Modul 5 · Social Engineering",t:"Phishing, Insider Threat & Identity Theft",c:`
+<h2>🎣 Phishing — Kail Digital</h2>
+<p>Phishing adalah teknik <strong>mengirim email palsu yang seolah-olah dari organisasi terpercaya</strong> untuk mencuri data login, nomor kartu kredit, dll.</p>
+
+<div class="grid2">
+  <div style="background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:16px">
+    <strong style="color:var(--danger)">Spear Phishing</strong><p style="font-size:14px;margin:6px 0 0">Phishing yang ditargetkan ke individu spesifik. Lebih personal dan meyakinkan.</p>
+  </div>
+  <div style="background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:16px">
+    <strong style="color:var(--danger)">Whaling</strong><p style="font-size:14px;margin:6px 0 0">Menyasar target "ikan paus" — CEO, CFO, eksekutif senior yang punya akses ke data sangat berharga.</p>
+  </div>
+  <div style="background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:16px">
+    <strong style="color:var(--warning)">Pharming</strong><p style="font-size:14px;margin:6px 0 0">Mengarahkan traffic web ke website palsu dengan mengubah DNS atau file hosts.</p>
+  </div>
+  <div style="background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:16px">
+    <strong style="color:var(--warning)">Spimming/Vishing</strong><p style="font-size:14px;margin:6px 0 0">Spimming = spam via IM. Vishing = phishing via telepon/VoIP.</p>
+  </div>
+</div>
+
+<h3>🏢 Insider Threat</h3>
+<p>Ancaman dari <strong>orang dalam organisasi</strong> yang punya akses ke aset kritis. Ada 4 tipe:</p>
+<ul>
+  <li><strong>Malicious Insider:</strong> Karyawan tidak puas yang sengaja merusak atau mencuri</li>
+  <li><strong>Professional Insider:</strong> Menjual kerentanan ke kompetitor atau pasar gelap</li>
+  <li><strong>Negligent Insider:</strong> Tidak sengaja membuka celah karena kurang pengetahuan keamanan</li>
+  <li><strong>Compromised Insider:</strong> Orang dalam yang sudah dikompromis oleh aktor luar</li>
+</ul>
+
+<h3>🪪 Identity Theft</h3>
+<p>Pencurian identitas adalah kejahatan di mana penjahat <strong>mencuri informasi pribadimu</strong> (nama, KTP, nomor kartu kredit) untuk melakukan penipuan. Tipe: pencurian identitas anak, keuangan, pajak, medis, asuransi, dll.</p>
+
+<div class="success-box">🛡️ <strong>Cara deteksi email phishing:</strong> Perhatikan ejaan yang salah, URL yang mencurigakan, permintaan informasi yang mendesak, dan logo yang terlihat tidak rapi.</div>
+`},
+
+// --- SLIDE 17 ---
+{b:"Modul 6 · Serangan Jaringan",t:"Packet Sniffing & Man-in-the-Middle",c:`
+<h2>📡 Mengintai Lalu Lintas Data</h2>
+<p><strong>Packet Sniffing</strong> adalah proses memantau dan menangkap semua paket data yang melintas di jaringan menggunakan software atau hardware khusus. Ini seperti menyadap telepon — tapi untuk data digital.</p>
+
+<div class="story-box">
+  <strong>Analogi Kantor Pos:</strong><br>
+  Bayangkan semua surat di kantor pos melintas meja sortir. Seorang penyerang yang menjadi petugas sortir bisa membuka dan membaca semua surat yang lewat sebelum mengirimnya ke tujuan. Itulah packet sniffing — membaca data yang melintas sebelum sampai ke tujuan.
+</div>
+
+<h3>Dua Jenis Sniffing</h3>
+<div class="grid2">
+  <div style="background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:18px">
+    <strong style="color:var(--primary)">Passive Sniffing</strong>
+    <p style="font-size:14px;margin:8px 0 0">Mengintai tanpa mengirim paket apapun. Bekerja di jaringan HUB (semua data disiarkan ke semua port). Tidak terdeteksi karena pasif.</p>
+  </div>
+  <div style="background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:18px">
+    <strong style="color:var(--danger)">Active Sniffing</strong>
+    <p style="font-size:14px;margin:8px 0 0">Mengirim paket untuk memanipulasi jaringan switch. Teknik: MAC Flooding, ARP Poisoning, DHCP Starvation, DNS Poisoning.</p>
+  </div>
+</div>
+
+<h3>Protokol Rentan terhadap Sniffing</h3>
+<div class="tag-row">
+  <span class="badge br">Telnet</span>
+  <span class="badge br">HTTP</span>
+  <span class="badge br">FTP</span>
+  <span class="badge br">SMTP</span>
+  <span class="badge br">POP</span>
+  <span class="badge br">IMAP</span>
+</div>
+<p>Semua protokol di atas mengirim data dalam <em>plaintext</em> (tidak dienkripsi). Gunakan versi aman: HTTPS, SFTP, SSH!</p>
+
+<h3>Teknik Active Sniffing</h3>
+<ul>
+  <li><strong>MAC Flooding:</strong> Membanjiri tabel CAM switch dengan MAC address palsu sampai switch bertindak seperti hub</li>
+  <li><strong>ARP Spoofing/Poisoning:</strong> Mengirim entry ARP palsu ke cache korban sehingga traffic dialihkan ke penyerang</li>
+  <li><strong>DHCP Starvation:</strong> Menghabiskan semua IP yang tersedia di DHCP server dengan request palsu</li>
+  <li><strong>DNS Poisoning:</strong> Memasukkan entry DNS palsu sehingga domain diarahkan ke server penyerang</li>
+</ul>
+
+<div class="warn-box">🔧 <strong>Tool terkenal:</strong> Wireshark adalah tool packet analyzer paling populer — digunakan baik oleh admin jaringan maupun penyerang.</div>
+`},
+
+// --- SLIDE 18 ---
+{b:"Modul 6 · Serangan Jaringan",t:"DoS & DDoS — Membanjiri Server",c:`
+<h2>💥 Membuat Layanan Tidak Bisa Diakses</h2>
+<p><strong>DoS (Denial of Service)</strong> adalah serangan yang membuat sistem tidak bisa melayani pengguna yang sah — dengan cara membanjiri sistem dengan traffic atau request yang tidak sah.</p>
+
+<div class="story-box">
+  <strong>Analogi:</strong><br>
+  Bayangkan sebuah restoran. Penyerang memesan 1000 tempat duduk palsu sehingga pelanggan asli tidak bisa masuk karena "penuh". Atau ribuan orang serentak menelepon layanan pelanggan sehingga jalur telepon tersumbat dan customer asli tidak bisa menghubungi.
+</div>
+
+<h3>DoS vs DDoS</h3>
+<div class="grid2">
+  <div style="background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:18px">
+    <strong style="color:var(--warning)">DoS</strong>
+    <p style="font-size:14px;margin:8px 0 0">Dari satu sumber. Lebih mudah diblokir karena hanya dari satu IP address.</p>
+  </div>
+  <div style="background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:18px">
+    <strong style="color:var(--danger)">DDoS (Distributed DoS)</strong>
+    <p style="font-size:14px;margin:8px 0 0">Dari ribuan/jutaan sumber (botnet). Sangat sulit diblokir karena datang dari berbagai IP di seluruh dunia.</p>
+  </div>
+</div>
+
+<h3>Teknik Serangan DoS/DDoS</h3>
+<ul>
+  <li><strong>UDP Flood:</strong> Membanjiri port random dengan paket UDP</li>
+  <li><strong>ICMP Flood (Ping Flood):</strong> Membanjiri dengan paket ping</li>
+  <li><strong>SYN Flood:</strong> Mengeksploitasi TCP three-way handshake dengan ribuan SYN request palsu</li>
+  <li><strong>Ping of Death:</strong> Mengirim paket yang ukurannya melebihi batas (>65,535 bytes)</li>
+  <li><strong>Smurf Attack:</strong> Menggunakan broadcast ICMP dengan IP korban sebagai sumber</li>
+  <li><strong>Permanent DoS (Phlashing):</strong> Merusak hardware secara permanen dengan update firmware palsu</li>
+</ul>
+
+<div class="danger-box">⚡ <strong>DRDoS (Distributed Reflection DoS):</strong> Penyerang menggunakan <em>intermediate servers</em> untuk merefleksikan dan mengamplifikasi serangan ke target — membuat sumber asli semakin sulit dilacak.</div>
+`},
+
+// --- SLIDE 19 ---
+{b:"Modul 7 · Serangan Web",t:"Web Server Attacks & Countermeasures",c:`
+<h2>🌐 Mengapa Web Server Selalu Jadi Target?</h2>
+<p>Web server bisa diakses dari seluruh dunia via internet — ini adalah kekuatan sekaligus kelemahan terbesar. Penyerang hanya perlu koneksi internet untuk mencoba menyerang.</p>
+
+<h3>Mengapa Web Server Disusupi?</h3>
+<ul>
+  <li>Akun default dengan password default atau tanpa password</li>
+  <li>Konfigurasi yang salah (misconfiguration)</li>
+  <li>Layanan yang tidak perlu tapi aktif</li>
+  <li>Permission file dan direktori yang tidak tepat</li>
+  <li>Bug di sistem operasi atau aplikasi web yang belum dipatch</li>
+</ul>
+
+<h3>Jenis Serangan Web Server</h3>
+<div class="phase-step">
+  <div class="phase-num" style="font-size:11px">DNS Hijacking</div>
+  <div class="phase-content"><strong>Membajak DNS</strong><p>Mengubah setting DNS sehingga semua request ke server target diarahkan ke server berbahaya milik penyerang.</p></div>
+</div>
+<div class="phase-step">
+  <div class="phase-num" style="font-size:11px">Directory Traversal</div>
+  <div class="phase-content"><strong>Keluar dari Root</strong><p>Menggunakan karakter <code>../</code> berulang kali untuk keluar dari direktori web root dan mengakses file sistem yang seharusnya tidak bisa diakses.</p></div>
+</div>
+<div class="phase-step">
+  <div class="phase-num" style="font-size:11px">Web Defacement</div>
+  <div class="phase-content"><strong>Mengubah Tampilan Website</strong><p>Penyerang mengubah tampilan halaman web dengan konten propaganda atau pesan mereka. Biasanya untuk unjuk kemampuan atau misi ideologis.</p></div>
+</div>
+<div class="phase-step">
+  <div class="phase-num" style="font-size:11px">SSRF</div>
+  <div class="phase-content"><strong>Server-Side Request Forgery</strong><p>Memanfaatkan server publik untuk mengirim request ke server internal yang seharusnya tidak bisa diakses dari luar.</p></div>
+</div>
+<div class="phase-step">
+  <div class="phase-num" style="font-size:11px">SSH Brute Force</div>
+  <div class="phase-content"><strong>Menebak Password SSH</strong><p>Mencoba ribuan kombinasi username/password secara otomatis sampai berhasil masuk ke server via SSH.</p></div>
+</div>
+`},
+
+// --- SLIDE 20 ---
+{b:"Modul 7 · Serangan Web",t:"OWASP Top 10 & SQL Injection",c:`
+<h2>🏆 10 Kerentanan Web Paling Berbahaya</h2>
+<p>OWASP (Open Web Application Security Project) merilis daftar <strong>10 risiko keamanan aplikasi web terpenting</strong> yang menjadi standar industri.</p>
+
+<div class="grid2">
+  <div style="background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px">
+    <strong style="color:var(--danger)">A1 - Injection</strong><p style="font-size:13.5px;margin:4px 0 0">SQL injection, command injection, LDAP injection</p>
+  </div>
+  <div style="background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px">
+    <strong style="color:var(--danger)">A2 - Broken Authentication</strong><p style="font-size:13.5px;margin:4px 0 0">Session ID exposed, timeout tidak tepat</p>
+  </div>
+  <div style="background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px">
+    <strong style="color:var(--warning)">A3 - Sensitive Data Exposure</strong><p style="font-size:13.5px;margin:4px 0 0">Enkripsi lemah, data sensitif tidak dilindungi</p>
+  </div>
+  <div style="background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px">
+    <strong style="color:var(--warning)">A4 - XXE</strong><p style="font-size:13.5px;margin:4px 0 0">XML External Entity - parser XML yang salah konfigurasi</p>
+  </div>
+  <div style="background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px">
+    <strong style="color:var(--primary)">A5 - Broken Access Control</strong><p style="font-size:13.5px;margin:4px 0 0">Pengguna bisa mengakses data/fungsi yang bukan haknya</p>
+  </div>
+  <div style="background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px">
+    <strong style="color:var(--primary)">A6 - Security Misconfiguration</strong><p style="font-size:13.5px;margin:4px 0 0">Konfigurasi default, layanan tidak perlu aktif</p>
+  </div>
+  <div style="background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px">
+    <strong style="color:var(--purple)">A7 - XSS</strong><p style="font-size:13.5px;margin:4px 0 0">Cross-Site Scripting - injeksi script di browser korban</p>
+  </div>
+  <div style="background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px">
+    <strong style="color:var(--purple)">A8 - Insecure Deserialization</strong><p style="font-size:13.5px;margin:4px 0 0">Data serialisasi yang tidak tervalidasi</p>
+  </div>
+</div>
+
+<h3>💉 SQL Injection — Serangan Paling Klasik</h3>
+<p>SQL Injection adalah teknik memasukkan <strong>perintah SQL berbahaya</strong> ke dalam form input aplikasi web untuk memanipulasi database backend.</p>
+
+<div class="code-box">
+-- Input normal:<br>
+Username: admin | Password: password123<br><br>
+-- Input SQL Injection:<br>
+Username: admin'-- | Password: apasaja<br><br>
+-- Query yang terbentuk:<br>
+SELECT * FROM users WHERE username='admin'--' AND password='apasaja'<br>
+-- Tanda -- mengubah sisa query menjadi komentar!<br>
+-- Hasilnya: penyerang login sebagai admin tanpa password
+</div>
+
+<div class="danger-box">⚠️ <strong>Pencegahan SQL Injection:</strong> Selalu gunakan <em>Prepared Statements / Parameterized Queries</em>, validasi input, dan least privilege untuk akun database.</div>
+`},
+
+];
+
+// ===== 50 SOAL QUIZ =====
+const QS=[
+{q:"Apa definisi paling tepat dari Keamanan Informasi?",opts:["Sebuah software untuk mencegah virus","Kondisi di mana informasi dan infrastruktur terlindungi dari pencurian, perusakan, dan gangguan","Sistem operasi yang aman digunakan","Proses membuat backup data secara rutin"],ans:1,exp:"Keamanan informasi adalah kondisi well-being (kesejahteraan) informasi dan infrastruktur di mana kemungkinan theft, tampering, dan disruption berada pada level rendah atau dapat ditoleransi."},
+
+{q:"CIA Triad terdiri dari tiga komponen utama. Manakah yang BUKAN bagian dari CIA Triad?",opts:["Confidentiality (Kerahasiaan)","Integrity (Integritas)","Availability (Ketersediaan)","Authenticity (Keaslian)"],ans:3,exp:"CIA Triad terdiri dari Confidentiality, Integrity, dan Availability. Authenticity dan Non-Repudiation adalah elemen tambahan keamanan informasi, tetapi bukan bagian dari CIA Triad inti."},
+
+{q:"Serangan ransomware paling tepat menyerang pilar CIA yang mana?",opts:["Confidentiality — mencuri data rahasia","Integrity — mengubah data tanpa izin","Availability — membuat data tidak bisa diakses","Authenticity — memalsukan identitas"],ans:2,exp:"Ransomware mengenkripsi file korban dan membuat mereka tidak bisa mengakses data mereka sendiri. Ini adalah serangan terhadap Availability (Ketersediaan) — layanan dan data tidak bisa diakses oleh pengguna yang berhak."},
+
+{q:"Dalam segitiga Keamanan-Fungsi-Kegunaan, apa yang terjadi jika tingkat keamanan ditingkatkan?",opts:["Fungsi dan kemudahan pakai meningkat","Fungsi dan kemudahan pakai otomatis berkurang","Hanya kemudahan pakai yang berkurang","Tidak ada perubahan pada fungsi dan kemudahan pakai"],ans:1,exp:"Dalam Security-Functionality-Usability Triangle, ketiga komponen saling berlawanan. Jika keamanan ditingkatkan (bola digeser ke sudut security), maka fungsi dan kemudahan pakai otomatis berkurang. Ini adalah trade-off yang harus diterima."},
+
+{q:"Manakah contoh PASSIVE attack?",opts:["SQL Injection","Denial of Service (DoS)","Packet Sniffing / Eavesdropping","Man-in-the-Middle"],ans:2,exp:"Passive attack adalah serangan yang TIDAK mengganggu data — hanya mengintai. Packet sniffing/eavesdropping adalah contoh passive attack karena penyerang hanya memantau lalu lintas tanpa mengubahnya. DoS, SQL Injection, dan MitM adalah active attacks."},
+
+{q:"Regulasi GDPR berasal dari mana dan kapan mulai berlaku?",opts:["Amerika Serikat, 2002","Uni Eropa, 25 Mei 2018","Inggris Raya, 2010","Perserikatan Bangsa-Bangsa, 2015"],ans:1,exp:"GDPR (General Data Protection Regulation) adalah regulasi privasi dari Uni Eropa yang mulai berlaku pada 25 Mei 2018. Ini adalah salah satu regulasi privasi dan keamanan data paling ketat di dunia dengan denda hingga puluhan juta euro."},
+
+{q:"PCI DSS adalah standar keamanan yang diterapkan untuk organisasi yang menangani...",opts:["Data kesehatan pasien","Kartu kredit dan pembayaran elektronik","Laporan keuangan perusahaan publik","Data pegawai pemerintah"],ans:1,exp:"PCI DSS (Payment Card Industry Data Security Standard) adalah standar keamanan yang wajib diterapkan oleh semua entitas yang menyimpan, memproses, atau mentransmisikan data kartu pembayaran (kredit, debit, ATM). Pelanggaran bisa berakibat denda atau pencabutan hak memproses kartu."},
+
+{q:"Apa yang dimaksud dengan Non-Repudiation dalam konteks keamanan informasi?",opts:["Pengguna tidak bisa masuk ke sistem dua kali","Pengirim pesan tidak bisa menyangkal bahwa dia yang mengirimnya","Data tidak bisa diubah tanpa izin","Sistem selalu tersedia 24 jam"],ans:1,exp:"Non-Repudiation (tidak dapat disangkal) berarti pengirim pesan tidak bisa menyangkal bahwa dia yang mengirimnya, dan penerima tidak bisa menyangkal bahwa dia menerimanya. Ini penting untuk bukti transaksi digital."},
+
+{q:"Apa perbedaan mendasar antara hacking dan ethical hacking?",opts:["Tidak ada perbedaan, keduanya sama-sama ilegal","Ethical hacking menggunakan tools yang berbeda","Ethical hacking dilakukan dengan izin resmi dari pemilik sistem","Ethical hacking hanya dilakukan di jaringan sendiri"],ans:2,exp:"Perbedaan fundamental antara hacking biasa dan ethical hacking adalah adanya IZIN TERTULIS (written permission) dari pemilik sistem. Ethical hacker menggunakan teknik yang sama, namun secara legal dan dengan tujuan menemukan celah untuk diperbaiki."},
+
+{q:"Dalam fase hacking, RECONNAISSANCE adalah fase...",opts:["Memasang backdoor agar bisa kembali masuk","Mengumpulkan informasi tentang target sebelum menyerang","Mengeksploitasi kerentanan yang ditemukan","Menghapus jejak setelah serangan"],ans:1,exp:"Reconnaissance adalah fase pertama hacking di mana penyerang mengumpulkan sebanyak mungkin informasi tentang target sebelum melancarkan serangan. Ada dua jenis: passive reconnaissance (tanpa interaksi langsung) dan active reconnaissance (berinteraksi langsung dengan target)."},
+
+{q:"Passive Reconnaissance berbeda dari Active Reconnaissance dalam hal...",opts:["Passive lebih cepat dan efektif","Passive tidak berinteraksi langsung dengan target","Active tidak menggunakan internet","Active hanya bisa dilakukan secara fisik"],ans:1,exp:"Passive Reconnaissance dilakukan TANPA berinteraksi langsung dengan target — contohnya mencari informasi di Google, cek whois, membaca berita tentang perusahaan. Active Reconnaissance berinteraksi langsung, misalnya menelepon help desk atau melakukan port scan."},
+
+{q:"Black Hat hacker berbeda dari White Hat hacker karena...",opts:["Black hat menggunakan tools yang lebih canggih","Black hat bekerja tanpa izin dan untuk tujuan jahat","Black hat tidak punya keahlian teknis","Black hat hanya menyerang perusahaan besar"],ans:1,exp:"Black Hat hacker adalah individu yang menggunakan keahlian komputernya untuk tujuan jahat/destruktif tanpa izin (disebut juga crackers). White Hat hacker menggunakan keahlian yang sama namun untuk tujuan defensif dan dengan izin resmi (security analyst / ethical hacker)."},
+
+{q:"Script Kiddie dalam konteks hacking merujuk pada...",opts:["Seorang programmer muda yang berbakat","Hacker yang hanya menggunakan tools buatan orang lain tanpa memahami cara kerjanya","Anak sekolah yang belajar coding","Seorang developer yang membangun tools hacking"],ans:1,exp:"Script Kiddie adalah hacker yang tidak memiliki keahlian teknis mendalam. Mereka hanya menjalankan script, tools, dan software yang dibuat oleh hacker yang lebih berpengalaman, tanpa benar-benar memahami cara kerja serangan tersebut."},
+
+{q:"Setelah berhasil masuk ke sistem, penyerang memasang backdoor. Ini adalah bagian dari fase...",opts:["Reconnaissance","Scanning","Gaining Access","Maintaining Access"],ans:3,exp:"Maintaining Access adalah fase keempat dalam siklus hacking. Setelah berhasil masuk, penyerang mencoba mempertahankan akses mereka dengan memasang backdoor, rootkit, atau Trojan sehingga mereka bisa kembali masuk kapanpun tanpa harus mengeksploitasi ulang."},
+
+{q:"Apa yang dilakukan penyerang pada fase 'Clearing Tracks'?",opts:["Membersihkan virus di komputer korban","Menghapus log dan bukti aktivitas mereka di sistem korban","Membersihkan file yang tidak diperlukan","Mereset password korban"],ans:1,exp:"Clearing Tracks adalah fase terakhir di mana penyerang menghapus bukti keberadaan mereka. Ini termasuk menimpa/menghapus log server, system log, dan application log agar tidak terdeteksi oleh tim keamanan atau forensik."},
+
+{q:"Malware adalah singkatan dari...",opts:["Malicious Hardware","Malicious Software","Managed Application Learning Ware","Malformed Layer Ware"],ans:1,exp:"Malware adalah singkatan dari Malicious Software (Perangkat Lunak Berbahaya). Ini adalah kategori umum yang mencakup semua jenis software yang dirancang untuk merusak, mengganggu, atau mendapatkan akses tidak sah ke sistem komputer."},
+
+{q:"Apa perbedaan utama antara Virus dan Worm?",opts:["Virus lebih berbahaya dari worm","Worm bisa menyebar sendiri melalui jaringan tanpa membutuhkan file inang, virus tidak","Virus bisa menyebar tanpa file inang, worm tidak","Tidak ada perbedaan, keduanya sama"],ans:1,exp:"Perbedaan kunci: WORM bisa mereplikasi diri dan menyebar otomatis melalui jaringan TANPA membutuhkan file inang atau tindakan pengguna. VIRUS membutuhkan file inang untuk menempel, dan biasanya disebarkan ketika pengguna menjalankan program yang terinfeksi."},
+
+{q:"Ransomware bekerja dengan cara...",opts:["Mencuri data dan mengirimnya ke server penyerang","Mengenkripsi file korban dan meminta tebusan untuk mendekripsinya","Menghancurkan hardware komputer","Memata-matai aktivitas pengguna"],ans:1,exp:"Ransomware adalah jenis malware yang mengenkripsi file-file korban (dokumen, foto, database) sehingga tidak bisa diakses, lalu menampilkan pesan permintaan tebusan (biasanya dalam cryptocurrency) kepada pembuat malware untuk mendapatkan kunci dekripsi."},
+
+{q:"Trojan Horse mendapatkan namanya dari mitologi Yunani. Dalam konteks malware, Trojan...",opts:["Menyerang hanya sistem Yunani","Menyamar sebagai program yang berguna padahal mengandung kode berbahaya di dalamnya","Bergerak sangat cepat dan tidak bisa dihentikan","Mereplikasi diri seperti virus"],ans:1,exp:"Seperti kisah Kuda Troya dalam mitologi Yunani (tentara bersembunyi di dalam kuda kayu hadiah), Trojan horse adalah malware yang menyamar sebagai software yang tampak berguna atau tidak berbahaya. Ketika dijalankan oleh pengguna, kode berbahaya di dalamnya aktif."},
+
+{q:"Rootkit berbeda dari malware lain karena...",opts:["Rootkit lebih cepat menyebar","Rootkit menyembunyikan keberadaannya sendiri dan aktivitas berbahaya dari sistem operasi","Rootkit hanya menyerang server","Rootkit tidak bisa di-remove"],ans:1,exp:"Rootkit adalah malware yang dirancang untuk menyembunyikan keberadaannya sendiri (dan malware lain) dari sistem operasi dan tools keamanan. Ia mengganti fungsi OS dengan versi berbahaya. Ini membuatnya sangat sulit dideteksi oleh antivirus konvensional."},
+
+{q:"Keylogger bekerja dengan cara...",opts:["Mengunci keyboard sehingga tidak bisa digunakan","Merekam setiap tombol yang ditekan pengguna dan mengirimkan datanya ke penyerang","Memperlambat kecepatan keyboard","Mengubah karakter yang diketik menjadi karakter acak"],ans:1,exp:"Keylogger adalah software atau hardware yang memantau dan merekam setiap keystroke (ketukan tombol) yang dilakukan pengguna. Informasi yang dikumpulkan (password, nomor kartu kredit, pesan chat) dikirim ke penyerang. Ini adalah cara umum mencuri credential."},
+
+{q:"Botnet dalam konteks keamanan siber adalah...",opts:["Jaringan komputer yang digunakan untuk mining cryptocurrency legal","Kumpulan komputer yang terinfeksi dan dikontrol penyerang untuk melancarkan serangan","Software untuk mengatur bandwidth jaringan","Program untuk otomatisasi tugas administratif"],ans:1,exp:"Botnet adalah jaringan dari banyak komputer yang sudah terinfeksi malware (disebut 'bots' atau 'zombies') yang dikontrol secara terpusat oleh penyerang (bot herder). Digunakan untuk serangan DDoS, spam, pencurian data, dan crypto mining tanpa sepengetahuan pemilik komputer."},
+
+{q:"Apa yang membuat Fileless Malware sangat sulit dideteksi?",opts:["Menggunakan enkripsi yang sangat kuat","Tidak menyimpan file apapun di disk — hidup murni di RAM","Mengubah nama dirinya sendiri setiap 5 menit","Menginfeksi BIOS komputer"],ans:1,exp:"Fileless Malware sangat sulit dideteksi karena ia tidak meninggalkan jejak berupa file di hard disk. Ia hidup di dalam RAM dan menyuntikkan kode jahat ke dalam proses yang sudah berjalan (seperti PowerShell, Word). Antivirus konvensional yang berbasis pemindaian file tidak bisa mendeteksinya."},
+
+{q:"Tiga kondisi data yang perlu dilindungi dalam keamanan data adalah...",opts:["Data at Rest, Data in Use, Data in Transit","Data Baru, Data Lama, Data Arsip","Data Terenkripsi, Data Biasa, Data Backup","Data Online, Data Offline, Data Hybrid"],ans:0,exp:"Tiga kondisi kritis data: (1) Data at Rest = data yang tersimpan di disk/database; (2) Data in Use = data yang sedang diproses di memori; (3) Data in Transit = data yang sedang berpindah melalui jaringan. Setiap kondisi membutuhkan perlindungan yang berbeda."},
+
+{q:"BitLocker adalah tools untuk...",opts:["Memblokir akses internet","Full Disk Encryption di Windows","Manajemen password","Firewall berbasis hardware"],ans:1,exp:"BitLocker adalah fitur enkripsi disk bawaan Windows (tersedia di versi Pro dan Enterprise). Ia mengenkripsi seluruh isi drive sehingga jika laptop dicuri, data tidak bisa diakses tanpa password atau recovery key."},
+
+{q:"RAID 0 memiliki karakteristik...",opts:["Performa tinggi tapi tidak ada redundansi — jika satu disk rusak, semua data hilang","Redundansi tinggi tapi performa rendah","Performa dan redundansi seimbang","Hanya untuk penyimpanan arsip jangka panjang"],ans:0,exp:"RAID 0 (Striping) membagi data merata ke semua disk yang ada untuk meningkatkan performa baca/tulis. NAMUN, ia tidak memiliki redundansi sama sekali. Jika satu disk rusak, seluruh data hilang karena data terpecah di semua disk."},
+
+{q:"Data Loss Prevention (DLP) adalah solusi yang digunakan untuk...",opts:["Memulihkan data yang hilang karena kerusakan hardware","Mencegah data sensitif keluar dari organisasi tanpa izin","Mengenkripsi semua file di komputer","Membuat backup data secara otomatis"],ans:1,exp:"DLP (Data Loss Prevention) adalah kumpulan solusi software dan proses yang mencegah pengguna mengirimkan data rahasia korporat ke luar organisasi. Ini termasuk memantau email, USB transfers, web upload, dan aktivitas lain yang bisa menyebabkan kebocoran data."},
+
+{q:"Full Backup, Differential Backup, dan Incremental Backup adalah jenis-jenis...",opts:["Enkripsi data","Backup data","Kompresi file","Replikasi database"],ans:1,exp:"Ini adalah tiga jenis utama backup data: Full Backup (menyalin semua data), Differential Backup (data yang berubah sejak full backup terakhir), dan Incremental Backup (data yang berubah sejak backup terakhir apapun jenisnya — paling efisien dari segi storage)."},
+
+{q:"Social Engineering menyerang kelemahan apa?",opts:["Kelemahan software yang belum dipatch","Kelemahan psikologi dan perilaku manusia","Kelemahan hardware yang usang","Kelemahan protokol jaringan"],ans:1,exp:"Social Engineering tidak menyerang kelemahan teknis — ia menyerang psikologi manusia. Penyerang memanipulasi kepercayaan, rasa urgensi, otoritas, atau keserakahan manusia untuk mendapatkan informasi rahasia. Ini membuatnya lebih berbahaya karena tidak ada patch untuk human error."},
+
+{q:"Tailgating dalam social engineering adalah teknik...",opts:["Mengirim email palsu ke karyawan","Mengikuti orang yang berwenang masuk ke area aman tanpa menggunakan ID sendiri","Menelepon korban dengan suara yang dimanipulasi","Memata-matai layar komputer dari jarak dekat"],ans:1,exp:"Tailgating (atau piggybacking) adalah teknik physical social engineering di mana penyerang mengikuti orang yang berwenang melewati pintu dengan akses kontrol — misalnya pura-pura tangan penuh sambil berkata 'Tolong tahan pintunya, ID badge saya di dalam.'"},
+
+{q:"Phishing adalah teknik yang menggunakan...",opts:["Software exploit untuk membobol server","Email palsu yang mengaku dari organisasi terpercaya untuk mencuri credential korban","Hardware keylogger yang dipasang di keyboard","Virus yang menyebar melalui USB"],ans:1,exp:"Phishing adalah praktik mengirimkan email ilegal yang berpura-pura berasal dari organisasi atau website terpercaya (bank, PayPal, Facebook) dengan tujuan mendapatkan informasi pribadi atau credential korban. Biasanya mengarahkan ke halaman web palsu."},
+
+{q:"Apa yang dimaksud dengan Whaling dalam konteks phishing?",opts:["Serangan phishing yang menggunakan gambar ikan paus","Phishing yang menargetkan eksekutif senior seperti CEO dan CFO","Phishing yang dikirim ke seluruh karyawan sekaligus","Phishing melalui aplikasi WhatsApp"],ans:1,exp:"Whaling adalah jenis spear phishing yang secara spesifik menargetkan 'ikan besar' atau target bernilai tinggi seperti CEO, CFO, direktur, atau politisi. Karena targetnya punya akses ke informasi sangat sensitif, serangan ini dirancang lebih personal dan meyakinkan."},
+
+{q:"Insider Threat yang paling berbahaya adalah tipe...",opts:["Negligent Insider yang tidak sengaja melakukan kesalahan","Compromised Insider yang dikontrol orang luar","Malicious Insider yang sengaja merusak sistem organisasi","Professional Insider yang menjual kerentanan"],ans:2,exp:"Ini sebenarnya debatable, tapi Professional Insider sangat berbahaya karena menggunakan pengetahuan teknis mendalam tentang sistem internal untuk mengidentifikasi kerentanan dan menjual informasi ke kompetitor atau pasar gelap. Mereka tahu persis di mana data berharga tersimpan dan bagaimana menghindari deteksi."},
+
+{q:"SMiShing adalah serangan phishing yang dilakukan melalui...",opts:["Social media (Instagram, Facebook)","SMS / pesan teks di ponsel","Software messaging seperti Slack","Smart TV"],ans:1,exp:"SMiShing = SMS + Phishing. Ini adalah serangan social engineering yang menggunakan pesan SMS untuk memancing korban melakukan tindakan tertentu: mengklik link berbahaya, menelepon nomor penipuan, atau memberikan informasi pribadi. Biasanya membuat pesan yang menimbulkan urgensi."},
+
+{q:"Dumpster Diving dalam social engineering berarti...",opts:["Menyelam ke dalam server database","Mencari informasi berharga di tempat sampah (dokumen yang dibuang tanpa dihancurkan)","Melakukan serangan DDoS yang mendalam","Mengakses dark web untuk mencari data"],ans:1,exp:"Dumpster Diving adalah teknik social engineering berbasis fisik di mana penyerang menggeledah tempat sampah korban untuk menemukan informasi berharga yang dibuang: memo internal, tagihan, data pelanggan, bagan organisasi, atau kertas yang berisi password yang belum dihancurkan."},
+
+{q:"Packet Sniffing bekerja dengan cara...",opts:["Memblokir paket data yang berbahaya","Memantau dan menangkap semua paket data yang melintas di jaringan","Mengenkripsi semua paket data","Mengkompresi data untuk mempercepat jaringan"],ans:1,exp:"Packet Sniffing adalah proses monitoring dan capturing semua paket data yang melintas di jaringan. Penyerang menggunakan sniffer (software/hardware) untuk membaca isi paket tersebut — termasuk password, email, dan data sensitif lain yang tidak dienkripsi."},
+
+{q:"Protokol mana yang AMAN dari packet sniffing karena mengenkripsi data?",opts:["HTTP","Telnet","FTP","HTTPS"],ans:3,exp:"HTTPS (HyperText Transfer Protocol Secure) mengenkripsi data menggunakan TLS/SSL, sehingga meskipun paket dapat di-capture, isinya tidak bisa dibaca. HTTP, Telnet, dan FTP mengirim data dalam plaintext (tidak terenkripsi) sehingga rentan terhadap packet sniffing."},
+
+{q:"ARP Spoofing/Poisoning adalah teknik yang memanipulasi...",opts:["Tabel routing DNS server","Cache ARP pada komputer korban sehingga traffic dialihkan ke penyerang","Tabel CAM pada switch jaringan","Database DHCP server"],ans:1,exp:"ARP Spoofing/Poisoning adalah serangan yang mengirimkan pesan ARP palsu ke dalam jaringan lokal. Hasilnya, cache ARP pada komputer korban akan berisi mapping yang salah (IP address asli dipetakan ke MAC address penyerang), sehingga traffic yang seharusnya ke tujuan asli malah diterima penyerang."},
+
+{q:"DoS (Denial of Service) attack bertujuan untuk...",opts:["Mencuri data rahasia dari server","Membuat sistem tidak bisa melayani pengguna yang sah","Mendapatkan akses admin ke server","Menginstal backdoor di sistem target"],ans:1,exp:"DoS attack bertujuan untuk membuat sistem atau layanan tidak dapat diakses oleh pengguna yang sah — bukan untuk mencuri data atau mendapatkan akses. Caranya dengan membanjiri sistem dengan request atau traffic palsu hingga resource habis dan tidak bisa melayani request legitimate."},
+
+{q:"Apa perbedaan DoS dan DDoS?",opts:["DDoS lebih mudah dilakukan dari DoS","DoS dari satu sumber, DDoS dari banyak sumber (botnet) serentak","DDoS hanya menyerang jaringan, DoS hanya menyerang server","Tidak ada perbedaan"],ans:1,exp:"DoS (Denial of Service) berasal dari SATU sumber dan relatif mudah diblokir dengan memblokir IP address sumber. DDoS (Distributed DoS) menggunakan RIBUAN/JUTAAN sumber (biasanya botnet) secara bersamaan, membuatnya jauh lebih sulit diblokir karena traffic datang dari berbagai IP di seluruh dunia."},
+
+{q:"SYN Flood attack mengeksploitasi kelemahan pada...",opts:["Protokol UDP","TCP three-way handshake","Protokol ICMP","Enkripsi SSL/TLS"],ans:1,exp:"SYN Flood mengeksploitasi kelemahan di TCP three-way handshake (SYN → SYN/ACK → ACK). Penyerang mengirim banyak paket SYN dengan IP sumber palsu. Server merespon dengan SYN/ACK dan menunggu ACK yang tidak pernah datang. Server jadi penuh dengan half-open connections dan tidak bisa menerima koneksi baru."},
+
+{q:"Ping of Death attack dilakukan dengan cara...",opts:["Mengirim ping request setiap detik tanpa henti","Mengirim paket yang ukurannya melebihi batas maksimum yang diizinkan (>65,535 bytes)","Mengubah TTL paket ping menjadi 0","Mengirim ping dari banyak sumber sekaligus"],ans:1,exp:"Ping of Death adalah serangan di mana penyerang mengirimkan paket ICMP (ping) yang berukuran sangat besar — melebihi batas maksimum yang ditentukan RFC 791 yaitu 65,535 bytes. Sistem yang menerima paket terlalu besar ini bisa crash, hang, atau restart saat mencoba mereassemble fragmen paket tersebut."},
+
+{q:"Web server dapat diakses dari mana saja melalui internet, ini merupakan...",opts:["Keunggulan utama web server","Kelemahan yang membuat web server rentan diserang dari mana saja","Fitur keamanan yang melindungi web server","Syarat utama untuk dapat menjalankan web server"],ans:1,exp:"Meskipun aksesibilitas universal adalah keunggulan web server, ini juga sekaligus menjadi kelemahan keamanan terbesar. Berbeda dengan server internal yang hanya bisa diakses dari jaringan lokal, web server bisa diserang dari seluruh penjuru dunia oleh siapapun dengan koneksi internet."},
+
+{q:"Directory Traversal attack menggunakan karakter apa untuk keluar dari web root?",opts:["Karakter /root/ di awal URL","Karakter ../ (dot-dot-slash) berulang kali","Karakter * (wildcard) di query string","Karakter % (percent-encoding) di akhir URL"],ans:1,exp:"Directory Traversal attack menggunakan karakter ../ (dot-dot-slash) berulang kali untuk 'mundur' ke direktori parent dan keluar dari web root. Contoh: http://server.com/../../etc/passwd. Ini memungkinkan penyerang mengakses file sistem yang seharusnya tidak bisa diakses melalui web."},
+
+{q:"Website Defacement adalah serangan yang bertujuan untuk...",opts:["Membuat website menjadi offline","Mengubah tampilan visual halaman web dengan konten tidak sah","Mencuri database website","Mengambil alih domain website"],ans:1,exp:"Web Defacement terjadi ketika penyerang berhasil masuk ke web server dan mengubah tampilan visual halaman web — mengganti konten dengan propaganda, pesan penyerang, atau gambar tidak pantas. Tujuannya biasanya untuk unjuk kemampuan, pesan ideologis, atau mempermalukan organisasi."},
+
+{q:"OWASP adalah singkatan dari...",opts:["Open Web Application Security Protocol","Open Web Application Security Project","Online Web Assessment Security Platform","Organized Web Application Standard Practices"],ans:1,exp:"OWASP adalah Open Web Application Security Project — organisasi nirlaba yang berfokus pada peningkatan keamanan software. Mereka menerbitkan OWASP Top 10, yaitu daftar 10 risiko keamanan aplikasi web yang paling kritis, yang menjadi acuan standar industri keamanan web."},
+
+{q:"SQL Injection adalah serangan yang menargetkan...",opts:["Server jaringan melalui paket UDP","Aplikasi web dengan cara menyisipkan perintah SQL berbahaya ke dalam input","Sistem autentikasi dengan brute force","Enkripsi SSL pada koneksi HTTPS"],ans:1,exp:"SQL Injection adalah teknik yang memanfaatkan kerentanan pada aplikasi web yang tidak memvalidasi input dengan benar. Penyerang menyisipkan perintah SQL berbahaya ke dalam form input (username, password, kotak pencarian) untuk memanipulasi database backend — bisa digunakan untuk bypass login, mencuri data, atau bahkan menghapus database."},
+
+{q:"XSS (Cross-Site Scripting) attack terjadi ketika...",opts:["Penyerang menyerang dua website sekaligus","Input pengguna yang tidak divalidasi dieksekusi sebagai script di browser korban lain","Server web diakses dari dua lokasi berbeda secara bersamaan","Style CSS halaman web diubah oleh penyerang"],ans:1,exp:"XSS terjadi ketika aplikasi web memasukkan data yang tidak terpercaya ke dalam halaman web tanpa validasi yang tepat. Penyerang menyisipkan script berbahaya (biasanya JavaScript) yang akan dieksekusi di browser pengguna lain yang mengunjungi halaman tersebut. Bisa digunakan untuk mencuri session cookie, redirect, atau deface."},
+
+{q:"Broken Authentication dalam OWASP Top 10 merujuk pada...",opts:["Password yang terlalu pendek","Kerentanan pada mekanisme autentikasi dan manajemen sesi yang bisa dieksploitasi penyerang","Penggunaan algoritma enkripsi yang sudah usang","Konfigurasi server yang salah"],ans:1,exp:"Broken Authentication mengacu pada kelemahan dalam implementasi autentikasi dan manajemen sesi. Contoh: Session ID yang terekspos di URL, timeout yang tidak dikonfigurasi dengan benar, tidak ada rate limiting untuk percobaan login, password hash yang lemah. Penyerang bisa mengeksploitasi ini untuk menyamar sebagai pengguna lain."},
+
+{q:"Countermeasure paling efektif untuk mencegah SQL Injection adalah...",opts:["Menggunakan firewall yang kuat","Menggunakan Prepared Statements / Parameterized Queries dan memvalidasi semua input","Mengenkripsi database dengan AES-256","Membatasi jumlah koneksi database"],ans:1,exp:"Cara paling efektif mencegah SQL Injection adalah menggunakan Prepared Statements (Parameterized Queries) — di mana query SQL dan data input dipisah secara ketat sehingga input pengguna tidak bisa diinterpretasikan sebagai perintah SQL. Selain itu, validasi input, principle of least privilege untuk akun database, dan WAF juga penting."},
+
+{q:"Apa yang dimaksud dengan Indicators of Compromise (IoC)?",opts:["Indikator bahwa sebuah software memiliki lisensi yang sah","Artefak forensik yang menunjukkan adanya potensi intrusi atau aktivitas berbahaya di sistem","Indikator kinerja komputer yang normal","Tanda-tanda bahwa sistem perlu diupgrade"],ans:1,exp:"Indicators of Compromise (IoC) adalah clue, artefak, dan data forensik yang ditemukan di jaringan atau sistem operasi yang mengindikasikan adanya intrusi atau aktivitas berbahaya. Contoh: IP address mencurigakan, file hash yang dikenal sebagai malware, registry key tidak normal, atau pola traffic yang aneh."},
+
+{q:"Cyber Kill Chain methodology digunakan untuk...",opts:["Membangun infrastruktur jaringan yang aman","Mengidentifikasi dan mencegah aktivitas intrusi berbahaya dengan memahami taktik penyerang","Mengaudit kepatuhan keamanan organisasi","Merancang kebijakan password yang kuat"],ans:1,exp:"Cyber Kill Chain adalah komponen dari intelligence-driven defense yang dikembangkan oleh Lockheed Martin. Metodologi ini membantu profesional keamanan memahami taktik, teknik, dan prosedur (TTPs) penyerang sehingga serangan bisa diidentifikasi dan dihentikan di setiap fase — dari reconnaissance hingga actions on objectives."},
+
+];
+
+// ===== STATE =====
+let mode='menu', qIdx=0, sel=null, ans=false, score=0, ua=[];
+let curSlide=0;
+
+// ===== RENDER =====
+function R(){
+  const root=document.getElementById('root');
+  root.className='app';
+  if(mode==='menu') root.innerHTML=menuHTML();
+  else if(mode==='material') root.innerHTML=materialHTML();
+  else if(mode==='quiz') root.innerHTML=quizHTML();
+  else if(mode==='result') root.innerHTML=resultHTML();
+  else if(mode==='review') root.innerHTML=reviewHTML();
+  root.scrollTop=0;
+  window.scrollTo(0,0);
+}
+
+function menuHTML(){
+  return `
+<div class="card animate-in">
+  <div style="text-align:center;padding:20px 0 30px">
+    <div style="font-size:64px;margin-bottom:20px;filter:drop-shadow(0 8px 20px rgba(0,194,255,0.3))">🛡️</div>
+    <h1 style="font-size:38px;margin-bottom:12px;background:linear-gradient(135deg,var(--primary),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Keamanan Siber</h1>
+    <p style="font-size:18px;color:var(--muted);margin-bottom:8px;-webkit-text-fill-color:unset">Zero to Hero — Panduan Lengkap untuk Pemula</p>
+    <div class="tag-row" style="justify-content:center;margin:20px 0">
+      <span class="badge bb">7 Modul</span>
+      <span class="badge bg">20 Topik Materi</span>
+      <span class="badge bo">50 Soal Latihan</span>
+    </div>
+  </div>
+  <div class="grid2" style="margin-bottom:24px">
+    <div class="gc" onclick="mode='material';curSlide=0;R()" style="background:var(--primary-bg);border-color:rgba(0,194,255,0.25);cursor:pointer;transition:all .2s">
+      <div style="font-size:40px;margin-bottom:16px">📚</div>
+      <div style="font-family:var(--head);font-weight:800;font-size:18px;color:var(--primary);margin-bottom:8px">Belajar Materi</div>
+      <div style="font-size:14px;color:var(--muted)">20 slide penjelasan mendalam dari dasar hingga mahir</div>
+    </div>
+    <div class="gc" onclick="startQ()" style="background:var(--accent-bg);border-color:rgba(255,107,53,0.25);cursor:pointer;transition:all .2s">
+      <div style="font-size:40px;margin-bottom:16px">⚡</div>
+      <div style="font-family:var(--head);font-weight:800;font-size:18px;color:var(--accent);margin-bottom:8px">Mulai Kuis</div>
+      <div style="font-size:14px;color:var(--muted)">50 soal pilihan ganda dengan pembahasan lengkap</div>
+    </div>
+  </div>
+  <div style="border-top:1px solid var(--border);padding-top:28px">
+    <h3 style="margin-top:0;margin-bottom:16px;color:var(--muted);font-size:13px;text-transform:uppercase;letter-spacing:1.5px">Topik yang Dipelajari</h3>
+    ${['🔐 Fondasi Keamanan Informasi (CIA Triad, Elemen Keamanan)','⚖️ Segitiga Keamanan-Fungsi-Kegunaan','🗡️ Klasifikasi & Vektor Serangan','📜 Regulasi Keamanan (GDPR, PCI DSS, ISO 27001)','🎭 Konsep Ethical Hacking','🎩 Kelas-Kelas Hacker','🔄 5 Fase Siklus Hacking','🦠 Malware (Trojan, Virus, Ransomware, Worm, Rootkit)','👁️ Spyware, Botnet, Keylogger, Fileless Malware','🔐 Enkripsi Data & RAID','💾 Backup Data & DLP','🧠 Social Engineering Concepts','🎭 Teknik Social Engineering','🎣 Phishing, Insider Threat & Identity Theft','📡 Packet Sniffing & ARP Spoofing','💥 Serangan DoS & DDoS','🌐 Web Server Attacks','🏆 OWASP Top 10 & SQL Injection'].map(t=>`<button class="topic-btn" onclick="mode='material';curSlide=${['🔐','⚖️','🗡️','📜','🎭','🎩','🔄','🦠','👁️','🔐','💾','🧠','🎭','🎣','📡','💥','🌐','🏆'].indexOf(t[0])};R()"><span class="topic-num">📖</span>${t}</button>`).join('')}
+  </div>
+</div>`;
+}
+
+function materialHTML(){
+  const s=SL[curSlide];
+  const pct=Math.round(((curSlide+1)/SL.length)*100);
+  return `
+<div style="margin-bottom:20px">
+  <div class="row">
+    <button class="btn" onclick="mode='menu';R()" style="padding:10px 18px;font-size:13px">← Menu Utama</button>
+    <div class="spacer"></div>
+    <span style="color:var(--muted);font-size:13px;font-family:var(--mono)">${curSlide+1} / ${SL.length}</span>
+  </div>
+  <div class="progress-bar" style="margin-top:16px;margin-bottom:0">
+    <div class="progress-fill" style="width:${pct}%"></div>
+  </div>
+</div>
+<div class="card animate-in">
+  <div style="margin-bottom:24px">
+    <span class="badge bb" style="margin-bottom:12px;display:inline-block">${s.b}</span>
+    <h1 style="font-size:27px;line-height:1.3;margin-top:8px">${s.t}</h1>
+  </div>
+  <div>${s.c}</div>
+</div>
+<div class="row" style="margin-top:8px;gap:12px">
+  <button class="btn" onclick="prevSlide()" ${curSlide===0?'disabled':''} style="flex:1;padding:18px;justify-content:center">← Sebelumnya</button>
+  ${curSlide<SL.length-1
+    ? `<button class="btn btn-p" onclick="nextSlide()" style="flex:2;padding:18px;justify-content:center">Lanjut Materi →</button>`
+    : `<button class="btn btn-s" onclick="startQ()" style="flex:2;padding:18px;justify-content:center">🚀 Siap? Mulai Kuis 50 Soal!</button>`
+  }
+</div>`;
+}
+
+function nextSlide(){if(curSlide<SL.length-1){curSlide++;R();}}
+function prevSlide(){if(curSlide>0){curSlide--;R();}}
+
+function quizHTML(){
+  const q=QS[qIdx];
+  const pct=Math.round(((qIdx+1)/QS.length)*100);
+  return `
+<div style="margin-bottom:20px">
+  <div class="row">
+    <button class="btn" onclick="mode='menu';R()" style="padding:10px 18px;font-size:13px">← Menu</button>
+    <div class="spacer"></div>
+    <span style="color:var(--muted);font-size:13px;font-family:var(--mono)">Soal ${qIdx+1} / ${QS.length} &nbsp;|&nbsp; ✅ ${score}</span>
+  </div>
+  <div class="progress-bar" style="margin-top:14px;margin-bottom:0">
+    <div class="progress-fill" style="width:${pct}%"></div>
+  </div>
+</div>
+<div class="card animate-in">
+  <div style="margin-bottom:10px"><span class="badge bp" style="font-size:11px">Soal #${qIdx+1}</span></div>
+  <div style="font-size:18px;font-weight:700;line-height:1.65;margin-bottom:28px;color:var(--text)">${q.q}</div>
+  <div>
+    ${q.opts.map((o,i)=>`
+      <button class="opt${ans?(i===q.ans?' ok':i===sel&&sel!==q.ans?' no':''):''}" onclick="doAns(${i})" ${ans?'disabled':''}>
+        <span style="font-family:var(--mono);font-size:13px;opacity:0.6;margin-right:10px">${String.fromCharCode(65+i)}.</span>${o}
+      </button>`).join('')}
+  </div>
+  ${ans?`<div class="explain animate-in"><strong style="color:var(--purple);font-size:16px;display:block;margin-bottom:12px">${sel===q.ans?'✅ Jawaban Benar! 🎉':'❌ Jawaban Salah'}</strong>${q.exp}</div>`:``}
+</div>
+<div class="row" style="margin-top:12px;gap:12px">
+  <button class="btn" onclick="goPrev()" ${qIdx===0?'disabled':''} style="padding:18px 24px;font-size:14px">← Kembali</button>
+  ${ans
+    ?(qIdx<QS.length-1
+      ?`<button class="btn btn-p" onclick="goNext()" style="flex:1;padding:18px;font-size:15px">Soal Berikutnya →</button>`
+      :`<button class="btn btn-s" onclick="mode='result';R()" style="flex:1;padding:18px;font-size:15px">Lihat Hasil Akhir 🏆</button>`)
+    :`<button class="btn" disabled style="flex:1;padding:18px;font-size:14px;opacity:.3">Pilih jawaban di atas</button>`}
+</div>`;
+}
+
+function resultHTML(){
+  const pct=Math.round((score/QS.length)*100);
+  const isPass=pct>=75;
+  const grade=pct>=90?'A+ — Pakar Keamanan Siber! Penguasaan materimu luar biasa 🏆':pct>=75?'B — Lulus dengan Nilai Baik! Kamu sudah siap mendalami keamanan siber lebih jauh 👍':pct>=50?'C — Cukup. Pahami ulang materi yang masih lemah ⚠️':'D — Perlu Belajar Lebih Banyak. Baca ulang semua materi dari awal 📚';
+  return `
+<div class="card animate-in" style="text-align:center;padding:60px 40px">
+  <div style="font-size:72px;margin-bottom:24px">${isPass?'🎓':'📚'}</div>
+  <div style="font-size:100px;font-weight:900;font-family:var(--head);line-height:1;margin-bottom:16px;color:${isPass?'var(--primary)':'var(--danger)'};text-shadow:0 0 48px ${isPass?'rgba(0,194,255,0.3)':'rgba(255,64,96,0.3)'}">${score}<span style="font-size:44px;color:var(--border2)">/${QS.length}</span></div>
+  <div style="font-size:22px;font-weight:800;font-family:var(--head);margin-bottom:20px;color:var(--text);line-height:1.4">${grade}</div>
+  <div style="padding:14px 32px;background:${isPass?'var(--primary-bg)':'var(--danger-bg)'};display:inline-block;border-radius:40px;font-size:17px;font-weight:700;color:${isPass?'var(--primary)':'var(--danger)'};margin-bottom:40px">Akurasi: ${pct}%</div>
+</div>
+<div class="grid2" style="margin-bottom:24px">
+  <div class="card" style="text-align:center;margin-bottom:0;background:var(--success-bg);border-color:rgba(0,229,160,0.2);padding:36px">
+    <div style="color:var(--success);font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:2px;margin-bottom:12px">Jawaban Benar</div>
+    <div style="font-size:64px;font-weight:900;color:var(--success);font-family:var(--mono)">${score}</div>
+  </div>
+  <div class="card" style="text-align:center;margin-bottom:0;background:var(--danger-bg);border-color:rgba(255,64,96,0.2);padding:36px">
+    <div style="color:var(--danger);font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:2px;margin-bottom:12px">Jawaban Salah</div>
+    <div style="font-size:64px;font-weight:900;color:var(--danger);font-family:var(--mono)">${QS.length-score}</div>
+  </div>
+</div>
+<div style="display:flex;flex-direction:column;gap:14px">
+  <button class="btn btn-p" style="padding:24px;font-size:17px;border-radius:14px" onclick="mode='review';R()">🔍 Lihat Pembahasan Semua Soal</button>
+  <div class="row">
+    <button class="btn" style="flex:1;padding:22px;font-size:16px" onclick="startQ()">🔄 Ulangi Kuis</button>
+    <button class="btn" style="flex:1;padding:22px;font-size:16px" onclick="mode='menu';R()">🏠 Menu Utama</button>
+  </div>
+</div>`;
+}
+
+function reviewHTML(){
+  return `
+<div class="row" style="margin-bottom:32px;position:sticky;top:0;background:var(--bg);padding:18px 0;z-index:10;border-bottom:2px solid var(--border)">
+  <button class="btn" onclick="mode='result';R()" style="padding:14px 20px;font-size:14px">← Kembali ke Hasil</button>
+  <strong style="font-size:17px;margin-left:12px;font-family:var(--head)">Pembahasan 50 Soal</strong>
+</div>
+${QS.map((q,i)=>{
+  const u=ua[i], ok=u===q.ans, skip=u===undefined;
+  return `
+<div class="ri ${ok?'rok':skip?'rskip':'rno'}">
+  <div class="ri-content">
+    <div style="font-weight:700;font-size:17px;margin-bottom:22px;color:var(--text);line-height:1.7">
+      <span style="font-family:var(--mono);font-size:12px;background:var(--light);padding:6px 12px;border-radius:8px;border:1px solid var(--border2);margin-right:12px;color:var(--muted)">#${i+1}</span>${q.q}
+    </div>
+    <div style="font-size:16px;line-height:1.7;background:var(--bg);padding:22px;border-radius:12px;border:1px solid var(--border)">
+      ${ok
+        ?`<span style="color:var(--success);font-weight:800;display:block;margin-bottom:8px">✅ Jawaban Kamu Benar:</span><span style="color:var(--text);background:var(--success-bg);padding:6px 14px;border-radius:8px;display:inline-block">${q.opts[u]}</span>`
+        :skip
+          ?`<span style="color:var(--warning);font-weight:800;display:block;margin-bottom:8px">⚠️ Dilewati (Tidak Dijawab)</span><span style="color:var(--success);font-weight:800;display:block;margin-top:14px;margin-bottom:8px">✅ Jawaban yang Benar:</span><span style="color:var(--text);background:var(--success-bg);padding:6px 14px;border-radius:8px;display:inline-block">${q.opts[q.ans]}</span>`
+          :`<span style="color:var(--danger);font-weight:800;display:block;margin-bottom:8px">❌ Jawaban Kamu Salah:</span><span style="color:var(--muted);text-decoration:line-through;background:var(--danger-bg);padding:6px 12px;border-radius:8px;display:inline-block">${q.opts[u]}</span><span style="color:var(--success);font-weight:800;display:block;margin-top:14px;margin-bottom:8px">✅ Jawaban yang Benar:</span><span style="color:var(--text);background:var(--success-bg);padding:6px 14px;border-radius:8px;display:inline-block">${q.opts[q.ans]}</span>`}
+    </div>
+  </div>
+  <div class="ri-content" style="background:var(--primary-bg);border-top:2px dashed var(--border2);font-size:15px;line-height:1.75;color:#9DD8F0;padding:24px 36px">
+    <strong style="color:var(--primary);display:flex;align-items:center;gap:10px;margin-bottom:10px"><span style="font-size:20px">💡</span> Pembahasan:</strong>${q.exp}
+  </div>
+</div>`;
+}).join('')}
+<button class="btn btn-p" onclick="mode='result';R()" style="width:100%;padding:24px;font-size:17px;border-radius:14px;margin-top:32px">← Kembali ke Hasil</button>`;
+}
+
+function startQ(){qIdx=0;sel=null;ans=false;score=0;ua=[];mode='quiz';R();}
+function doAns(i){
+  if(ans)return;
+  sel=i;ans=true;
+  if(i===QS[qIdx].ans)score++;
+  ua[qIdx]=i;
+  R();
+}
+function goNext(){
+  qIdx++;
+  sel=ua[qIdx]!==undefined?ua[qIdx]:null;
+  ans=ua[qIdx]!==undefined;
+  R();
+}
+function goPrev(){
+  if(qIdx>0){
+    qIdx--;
+    sel=ua[qIdx]!==undefined?ua[qIdx]:null;
+    ans=ua[qIdx]!==undefined;
+    R();
+  }
+}
+R();
+</script>
+</body>
+</html>
